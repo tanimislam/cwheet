@@ -1,6 +1,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import sys, math
+from cwResources import ColorWheelResource
 
 class ColorWheelButtons( QWidget ):
     def __init__(self, parent):
@@ -14,21 +15,10 @@ class ColorWheelButtons( QWidget ):
         self.resetScaleButton = QPushButton( "RESET SCALE" )
         self.recenterLastButton = QPushButton( "RESET LCOLOR" )
         self.normalizeColorValueButton = QPushButton( "NORM CVALUE" )
+        cwr = ColorWheelResource()
         for but in ( self.scaleButton, self.resetScaleButton, self.recenterLastButton,
                      self.normalizeColorValueButton ):
-            but.setStyleSheet("""
-            border-width: 2px;
-            border-color: blue;
-            border-style: solid;
-            border-radius: 7px;
-            padding: 3px;
-            font-size: 12px;
-            font-weight: bold;
-            padding-left: 5px;
-            padding-right: 5px;
-            min-width: 50px;
-            min-height: 13px;
-            """)
+            but.setStyleSheet( cwr.getStyleSheet( 'qpushbutton' ) )
         buttonLayout.addWidget( self.scaleButton, 0, 0, 0, 1 )
         buttonLayout.addWidget( self.resetScaleButton, 0, 1, 1, 1 )
         buttonLayout.addWidget( self.recenterLastButton, 0, 2, 1, 1 )

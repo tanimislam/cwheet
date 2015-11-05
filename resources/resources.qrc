@@ -1,0 +1,7 @@
+<RCC>
+  <qresource>
+    <file>static/qpushbutton.css</file>
+    <file>static/Alef-Regular.ttf</file>
+    <file>static/Alef-Bold.ttf</file>
+  </qresource>
+</RCC>

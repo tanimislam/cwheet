@@ -1,0 +1,22 @@
+QPushButton {
+  font-family: Alef;
+  border-width: 2px;
+  border-color: blue;
+  border-style: solid;
+  border-radius: 7px;
+  padding: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  padding-left: 5px;
+  padding-right: 5px;
+  min-width: 50px;
+  min-height: 15px;
+}
+
+QPushButton:hover:!pressed {
+  background-color: #FFDBBF;
+}
+
+QPushButton:pressed {
+  background-color: red;
+}
