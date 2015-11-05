@@ -39,3 +39,10 @@ class ColorWheelResource( object ):
         if not ColorWheelResource._instance:
             ColorWheelResource._instance = ColorWheelResource.__ColorWheelResource( )
         return ColorWheelResource._instance
+
+if __name__=='__main__':
+    app = QApplication(sys.argv)
+    cwr = ColorWheelResource()
+    print 'fonts: %s' % cwr.getFontNames()
+    print 'stylesheets: %s' % cwr.getStyleSheets()
+    sys.exit()

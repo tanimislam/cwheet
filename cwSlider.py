@@ -1,6 +1,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import math, copy
+from cwResources import ColorWheelResource
 
 class ColorWheelSlider( QWidget ):
     def _layoutWidgets( self ):
@@ -46,19 +47,8 @@ class ColorWheelSlider( QWidget ):
         self.scalingLabel = QLabel("%0.3f" % 1.0 )
         self.valueLabel = QLabel("%0.3f" % 0.0)
         self.settingButton = QPushButton("SET TRANSFORM")
-        self.settingButton.setStyleSheet("""
-        border-width: 2px;
-        border-color: blue;
-        border-style: solid;
-        border-radius: 7px;
-        padding: 3px;
-        font-size: 12px;
-        font-weight: bold;
-        padding-left: 5px;
-        padding-right: 5px;
-        min-width: 50px;
-        min-height: 13px;
-        """)
+        cwr = ColorWheelResource()
+        self.settingButton.setStyleSheet( cwr.getStyleSheet( 'qpushbutton' ) )
         #
         ## actions on sliders and button
         self.rotationSlider.valueChanged.connect( self.rotateColors )

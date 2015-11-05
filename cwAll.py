@@ -4,6 +4,7 @@ from cwWidgets import ColorWheelWidget, ColorWheelBar, ColorWheelValues
 from cwTable import ColorWheelTable
 from cwSlider import ColorWheelSlider
 from cwButtons import ColorWheelButtons
+from cwMenubar import ColorWheelMenuBar
 import sys, math
 
 class ColorWheelAll( QWidget ):
@@ -65,13 +66,20 @@ class ColorWheelAll( QWidget ):
         self.cwbut = ColorWheelButtons( self )
         self.cwt = ColorWheelTable( self )
         self.cwv = ColorWheelValues( self )
+        self.cwmb = ColorWheelMenuBar( self )
         self.mainWidth = mainWidth
         self.mainDiameter = mainDiameter
         #
+        mainLayout = QVBoxLayout( )
+        self.setLayout( mainLayout )
+        mainLayout.addWidget( self.cwmb )
+        #
+        topWidget = QWidget( )
         topLayout = QHBoxLayout( )
-        self.setLayout( topLayout )
+        topWidget.setLayout( topLayout )
         topLayout.addWidget( self._layoutLeftWidget( ) )
         topLayout.addWidget( self._layoutRightWidget( ) )
+        mainLayout.addWidget( topWidget )
         #
         self.setSizePolicy( QSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed ) )
         self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint )

@@ -40,7 +40,7 @@ class ColorWheelButtons( QWidget ):
         self.parent.cww.rescaleWheel( dmax = 1.0 )
 
     def recenterLastColor( self ):
-        self.parent.hsvs[-1] = [ 0.0, 0.0, 1.0 ]
+        self.parent.hsvs[ self.parent.currentIndex ] = [ 0.0, 0.0, 1.0 ]
         self.parent.update()
 
     def paintEvent(self, evt):

@@ -1,6 +1,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import copy, time
+from cwResources import ColorWheelResource
 
 _colorwheel = [  QColor(name) for name in ( '#E5EDE9', '#EDE6CE', '#EDDFEB',
                                             '#F1EDFE', '#CCD9FD', '#F9EBFD' ) ]
@@ -19,8 +20,7 @@ class ColorWheelTableModel( QAbstractTableModel ):
     def __init__(self, parent = None ):
         super(ColorWheelTableModel, self).__init__(parent)
         self.colorNames = []
-        self.headerData = [ 'index', 'name', 'color', 'colorbar' ]
-        #self.headerData = [ 'index', 'name', 'color', ]
+        self.headerData = [ 'index', 'name', 'color', 'swatch' ]
         self.parent = parent
 
     def pushData(self, newColorNames ):
@@ -141,7 +141,11 @@ class ColorWheelTable(QTableView):
         self.setItemDelegateForColumn(0, EntryDelegate( self ) )
         self.setItemDelegateForColumn(1, NameDelegate( self ) )
         self.setItemDelegateForColumn(2, HexColorDelegate( self ) )
-        # self.setItemDelegateForColumn(3, ColorBarDelegate( self ) )
+        self.setItemDelegateForColumn(3, ColorBarDelegate( self ) )
+
+        # set style
+        cwr = ColorWheelResource()
+        self.setStyleSheet( cwr.getStyleSheet( 'qtableview' ) )
 
         # show grid
         self.setShowGrid( True )
