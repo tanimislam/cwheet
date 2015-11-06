@@ -22,12 +22,35 @@ class ColorWheelMenuBar( QMenuBar ):
         self.saveAction.triggered.connect( self.saveCSSFile )
         openAction.setShortcut('Shift+Ctrl+O')
         openAction.triggered.connect( self.openCSSFile )
+        openURLAction.triggered.connect( self.openCSSURLFile )
 
     def enableSaveAction( self ):
         self.saveAction.setEnabled( True )
         
     def disableSaveAction( self ):
         self.saveAction.setEnabled( False )
+
+    def openCSSURLFile( self ):
+        while(True):
+            myURL, ok = QInputDialog.getText( self, 'Open CSS URL. Can end by pressing cancel or by putting in blank.',
+                                              "URL:", QLineEdit.Normal )
+            if not ok:
+                return
+            myURL = myURL.strip()
+            if len( myURL ) == 0:
+                return
+            status = (myURL.startswith('http://') or myURL.startswith('https://'))
+            status = status and myURL.endswith('.css')
+            if status:
+                break
+        css = None
+        try:
+            css = cssutils.parseURL( myURL )
+        except ValueError:
+            error = QErrorMessage( )
+            
+            
+                                              
 
     def openCSSFile( self ):
         while( True ):
