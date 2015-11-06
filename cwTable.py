@@ -1,20 +1,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import copy, time
-from cwResources import ColorWheelResource
-
-_colorwheel = [  QColor(name) for name in ( '#E5EDE9', '#EDE6CE', '#EDDFEB',
-                                            '#F1EDFE', '#CCD9FD', '#F9EBFD' ) ]
-
-def isValidColorString(mystr):
-    if len(mystr) != 7:
-        return False
-    if not mystr.startswith('#'):
-        return False
-    mychars = set([ tok for tok in mystr[1:] ])
-    if len(mychars - set(['%d' % num for num in xrange(10) ] + ['A','B','C','D','E','F' ])) != 0:
-        return False
-    return True
+from cwResources import ColorWheelResource, isValidColorString
 
 class ColorWheelTableModel( QAbstractTableModel ):
     def __init__(self, parent = None ):
@@ -22,6 +9,7 @@ class ColorWheelTableModel( QAbstractTableModel ):
         self.colorNames = []
         self.headerData = [ 'index', 'name', 'color', 'swatch' ]
         self.parent = parent
+        self._colorwheel = ColorWheelResource().getColorWheel()
 
     def pushData(self, newColorNames ):
         #
@@ -49,7 +37,7 @@ class ColorWheelTableModel( QAbstractTableModel ):
         col = index.column()
         if role == Qt.BackgroundRole:
             if col < 3:
-                return QBrush( _colorwheel[ index.row() % 6 ] )
+                return QBrush( self._colorwheel[ index.row() % 6 ] )
             else:
                 hsvTrans = self.parent.getTransformedHsvs( )
                 hv, sv, vv = hsvTrans[ row ]

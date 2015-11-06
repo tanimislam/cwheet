@@ -7,7 +7,7 @@ from cwButtons import ColorWheelButtons
 from cwMenubar import ColorWheelMenuBar
 import sys, math
 
-class ColorWheelAll( QWidget ):
+class ColorWheelAll( QMainWindow ):
     def _layoutLeftWidget( self ):
         leftWidget = QWidget( )
         leftLayout = QVBoxLayout( )
@@ -70,16 +70,14 @@ class ColorWheelAll( QWidget ):
         self.mainWidth = mainWidth
         self.mainDiameter = mainDiameter
         #
-        mainLayout = QVBoxLayout( )
-        self.setLayout( mainLayout )
-        mainLayout.addWidget( self.cwmb )
+        self.setMenuBar( self.cwmb )
         #
-        topWidget = QWidget( )
-        topLayout = QHBoxLayout( )
-        topWidget.setLayout( topLayout )
-        topLayout.addWidget( self._layoutLeftWidget( ) )
-        topLayout.addWidget( self._layoutRightWidget( ) )
-        mainLayout.addWidget( topWidget )
+        centerWidget = QWidget( )
+        centerLayout = QHBoxLayout( )
+        centerWidget.setLayout( centerLayout )
+        centerLayout.addWidget( self._layoutLeftWidget( ) )
+        centerLayout.addWidget( self._layoutRightWidget( ) )
+        self.setCentralWidget( centerWidget )
         #
         self.setSizePolicy( QSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed ) )
         self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint )

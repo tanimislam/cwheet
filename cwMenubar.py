@@ -5,9 +5,13 @@ class ColorWheelMenuBar( QMenuBar ):
     def __init__(self, parent ):
         super(ColorWheelMenuBar, self).__init__( parent )
         self.parent = parent
-
-        self.addMenu( QMenu('File', parent) )
-        self.addMenu( QMenu('Operations', parent) )
-        self.addMenu( QMenu('Help', parent) )
-
-        print 'Hello World'
+        #
+        fileMenu = self.addMenu( '&File' )
+        saveAction = fileMenu.addAction('&Save CSS' )
+        openAction = fileMenu.addAction('&Open CSS' )
+        openURLAction = fileMenu.addAction('&Open URL CSS')
+        #
+        opsMenu = self.addMenu( '&Operations' )
+        showExpandedColorSwatchAction = opsMenu.addAction('&Expanded Color Swatch' )
+        #
+        helpMenu = self.addAction( '&Help' )
