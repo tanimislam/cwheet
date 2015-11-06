@@ -1,6 +1,6 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-import sys, math
+import sys, math, numpy
 from cwResources import ColorWheelResource
 
 class ColorWheelButtons( QWidget ):
@@ -28,6 +28,7 @@ class ColorWheelButtons( QWidget ):
         self.scaleButton.clicked.connect( self.rescaleColor )
         self.resetScaleButton.clicked.connect( self.resetScaleColor )
         self.recenterLastButton.clicked.connect( self.recenterLastColor )
+        self.normalizeColorValueButton.clicked.connect( self.normCValue )
 
     def rescaleColor(self):
         maxSat = max([ s for (h, s, v) in self.parent.hsvs ])
@@ -35,13 +36,19 @@ class ColorWheelButtons( QWidget ):
             maxSat = 0.01
         self.parent.cww.rescaleWheel( dmax = maxSat )
 
-
     def resetScaleColor( self ):
         self.parent.cww.rescaleWheel( dmax = 1.0 )
 
     def recenterLastColor( self ):
         self.parent.hsvs[ self.parent.currentIndex ] = [ 0.0, 0.0, 1.0 ]
         self.parent.update()
+
+    def normCValue( self ):
+        if len( self.parent.hsvs ) > 1:
+            avgVal = numpy.average([ v for (h, s, v) in self.parent.hsvs ])
+            for idx in xrange(len( self.parent.hsvs )):
+                self.parent.hsvs[idx][-1] = avgVal
+            self.parent.update()
 
     def paintEvent(self, evt):
         qs = self.size()

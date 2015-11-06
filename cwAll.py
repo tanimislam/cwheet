@@ -64,9 +64,9 @@ class ColorWheelAll( QMainWindow ):
         self.cwb = ColorWheelBar( self, mainWidth, mainDiameter )
         self.cws = ColorWheelSlider( self )
         self.cwbut = ColorWheelButtons( self )
+        self.cwmb = ColorWheelMenuBar( self )
         self.cwt = ColorWheelTable( self )
         self.cwv = ColorWheelValues( self )
-        self.cwmb = ColorWheelMenuBar( self )
         self.mainWidth = mainWidth
         self.mainDiameter = mainDiameter
         #
@@ -122,6 +122,10 @@ class ColorWheelAll( QMainWindow ):
             vv = max(0.0, vv )
             newHsvs.append([hv, sv, vv])
         return newHsvs
+
+    def pushNewColors( self, newHsvs ):
+        self.currentIndex = -1
+        self.hsvs = newHsvs[:]
         
 
     #

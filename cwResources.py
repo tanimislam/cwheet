@@ -46,11 +46,16 @@ def _getcolortuple( rule ):
 def getBackgroundColorDict( css ):
     validRules = filter( _isvalidrule, css.cssRules )
     colorTupleList = [ _getcolortuple( rule ) for rule in validRules ]
-    keys = zip(*colorTupleList)[0]
-    if len(keys) != len(set(keys)):
+    if not canSaveColorDict( colorTupleList ):
         raise ValueError(' '.join([ "Error, do not have an unique set of colors defined here.",
                                     "Please try again with another source." ]))
     return dict( colorTupleList )
+
+def canSaveColorDict( colorTupleList ):
+    keys = zip(*colorTupleList)[0]
+    if len(keys) != len(set(keys)):
+        return False
+    return True
 
 class ColorWheelResource( object ):
     class __ColorWheelResource(object):

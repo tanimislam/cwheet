@@ -93,6 +93,7 @@ class ColorWheelTableModel( QAbstractTableModel ):
                               len( self.parent.hsvs ) )
         self.colorNames.append( newColorName )
         self.endInsertRows( )
+        
 
     def subtractRow( self ):
         currIdx = self.parent.currentIndex
@@ -205,9 +206,19 @@ class ColorWheelTable(QTableView):
 
     def addRow( self ):
         self.tm.addRow( 'default' )
+        colorNames = self.getColorNames()
+        if len(colorNames) != len(set(colorNames)):
+            self.parent.cwmb.disableSaveAction( )
+        else:
+            self.parent.cwmb.enableSaveAction( )
 
     def subtractRow( self ):
         self.tm.subtractRow( )
+        colorNames = self.getColorNames()
+        if len(colorNames) != len(set(colorNames)):
+            self.parent.cwmb.disableSaveAction( )
+        else:
+            self.parent.cwmb.enableSaveAction( )
 
     def scrollUpOnePage( self ):
         self.scrollContentsBy( 0, -self.size().height() )
@@ -222,6 +233,17 @@ class ColorWheelTable(QTableView):
         self.parent.currentIndex = row
         self.parent.update( )
 
+    def getColorNames( self ):
+        return self.tm.colorNames[:]
+
+    def getColorNamesDict( self ):
+        return { self.tm.colorNames[ row ] : self.tm.getColor( row ) for
+                 row in xrange( len( self.tm.colorNames ) ) }
+
+    def pushData( self, colorNames ):
+        assert(len( colorNames) == len(self.parent.hsvs) )
+        self.tm.pushData( colorNames )
+
     #def mouseReleaseEvent( self, evt ):
     #    if evt.button() == Qt.RightButton:
     #        self.clearSelection()
@@ -232,18 +254,12 @@ class EntryDelegate(QItemDelegate):
 
     def createEditor(self, parent, option, index):
         rowNumber = index.row()
-        model = index.model()
-        act_index = model.index( rowNumber, 0 )
-        idx = model.data( act_index, Qt.DisplayRole ).toInt( )[0]
-        editor = QLabel( "%02d" % idx, parent = parent )
+        editor = QLabel( "%02d" % ( rowNumber + 1 ), parent )
         return editor
 
     def setEditorData(self, editor, index ):
         rowNumber = index.row()
-        model = index.model()
-        act_index = model.index( rowNumber, 0 )
-        idx = model.data( act_index, Qt.DisplayRole ).toInt( )
-        editor.setText( "%02d" % idx )
+        editor.setText( "%02d" % ( rowNumber + 1 ) )
 
 class NameDelegate(QItemDelegate):
     def __init__(self, owner):
@@ -252,24 +268,24 @@ class NameDelegate(QItemDelegate):
     def createEditor(self, parent, option, index):
         rowNumber = index.row()
         model = index.model()
-        act_index = model.index( rowNumber, 1 )
-        name = str( model.data( act_index, Qt.DisplayRole).toString() ).strip()
+        name = model.colorNames[ rowNumber ]
         editor = QLineEdit( name, parent )
         return editor
 
     def setEditorData(self, editor, index ):
         rowNumber = index.row()
         model = index.model()
-        act_index = model.index( rowNumber, 1 )
-        name = str( model.data( act_index, Qt.DisplayRole).toString() ).strip()
+        name = model.colorNames[ rowNumber ]
         editor.setText( name )
 
     def setModelData( self, editor, model, index ):
         candText = str( editor.text() ).strip()
         rowNumber = index.row( )
-        model = index.model( )
-        model.colorNames[ rowNumber ] = candText
-        
+        currName = model.colorNames[ rowNumber ]
+        if len(candText) == 0 or len(candText.split()) > 1:
+            editor.setText( currName )
+        else:
+            model.colorNames[ rowNumber ] = candText
 
 class HexColorDelegate(QItemDelegate):
     def __init__(self, owner):
@@ -305,9 +321,7 @@ class HexColorDelegate(QItemDelegate):
 class ColorBarDelegate(QItemDelegate):
     def __init__(self, owner):
         super(ColorBarDelegate, self).__init__( owner )
-
+        
     def createEditor( self, parent, option, index ):
-        rowNumber = index.row()
-        model = index.model()
         editor = QLabel( parent )
         return editor
