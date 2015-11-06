@@ -5,7 +5,7 @@ from cwTable import ColorWheelTable
 from cwSlider import ColorWheelSlider
 from cwButtons import ColorWheelButtons
 from cwMenubar import ColorWheelMenuBar
-import sys, math
+import sys, math, os
 
 class ColorWheelAll( QMainWindow ):
     def _layoutLeftWidget( self ):
@@ -97,7 +97,16 @@ class ColorWheelAll( QMainWindow ):
         quitAction.setShortcut( 'Ctrl+Q' )
         quitAction.triggered.connect( qApp.quit )
         self.addAction( quitAction )
+        #
+        screenshotAction = QAction( self )
+        screenshotAction.setShortcut( 'Shift+Ctrl+1' )
+        screenshotAction.triggered.connect( self.takeScreenshot )
+        self.addAction( screenshotAction )
 
+    def takeScreenshot( self ):
+        p = QPixmap.grabWindow( self.winId( ) )
+        p.save( os.path.join( os.path.expanduser( '~/temp' ), 'cwheet_screenshot.png' ) )
+        
     def getTransformedHsvs( self ):
         rotVal = self.cws.rotationSlider.value() * 1.0 / 360.0
         scaleVal = math.pow( 10.0, 0.01 * self.cws.scalingSlider.value() )
