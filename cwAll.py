@@ -97,13 +97,6 @@ class ColorWheelAll( QMainWindow ):
         quitAction.setShortcut( 'Ctrl+Q' )
         quitAction.triggered.connect( qApp.quit )
         self.addAction( quitAction )
-        
-    #def keyPressEvent(self, evt):
-    #    if evt.key() == Qt.Key_Z:
-    #        self.removeColor()
-    #    elif evt.key() == Qt.Key_Y:
-    #        self.cws.snapBack()
-    #    QWidget.keyPressEvent(self, evt )
 
     def getTransformedHsvs( self ):
         rotVal = self.cws.rotationSlider.value() * 1.0 / 360.0
