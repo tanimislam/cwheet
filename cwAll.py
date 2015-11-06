@@ -82,7 +82,7 @@ class ColorWheelAll( QMainWindow ):
         self.setSizePolicy( QSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed ) )
         self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint )
         #
-        ##
+        ## actions
         removeColorAction = QAction( self )
         removeColorAction.setShortcut( 'Ctrl+Z' )
         removeColorAction.triggered.connect( self.removeColor )
@@ -92,7 +92,11 @@ class ColorWheelAll( QMainWindow ):
         snapBackAction.setShortcut( 'Ctrl+Y' )
         snapBackAction.triggered.connect( self.cws.snapBack )
         self.addAction( snapBackAction )
-        
+        #
+        quitAction = QAction( self )
+        quitAction.setShortcut( 'Ctrl+Q' )
+        quitAction.triggered.connect( qApp.quit )
+        self.addAction( quitAction )
         
     #def keyPressEvent(self, evt):
     #    if evt.key() == Qt.Key_Z:
