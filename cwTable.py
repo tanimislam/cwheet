@@ -1,6 +1,5 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-import copy, time
 from cwResources import ColorWheelResource, isValidColorString
 
 class ColorWheelTableModel( QAbstractTableModel ):
@@ -21,7 +20,7 @@ class ColorWheelTableModel( QAbstractTableModel ):
         #
         ## now add in the data from tabledata
         self.beginInsertRows( QModelIndex(), 0, len( newColorNames ) - 1 )
-        self.colorNames = copy.deepcopy( newColorNames )
+        self.colorNames = newColorNames[:]
         self.endInsertRows( )
 
     def rowCount(self, parent ):
