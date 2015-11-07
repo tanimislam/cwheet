@@ -28,19 +28,29 @@ class ColorWheelValues( QWidget ):
         painter.setRenderHint( QPainter.Antialiasing )
         painter.drawImage(0, 0, self.image )
         pen = QPen( )
-        color = QColor( "red" )
-        color.setAlphaF( 1.0 )
-        pen.setColor( color )
-        pen.setWidth( 2.5 )
-        painter.setPen( pen )
+        color = QColor( )
         allHsvs = self.parent.getTransformedHsvs()
         if self.parent.currentIndex == -1:
             currentIndex = len( self.parent.hsvs ) - 1
         else:
             currentIndex = self.parent.currentIndex
+        
+        pen.setWidth( 1 )
+        for idx, tup in enumerate( allHsvs ):
+            h, s = tup[:2]
+            for xpos in xrange( xStart, xEnd + 1):
+                v = QStyle.sliderValueFromPosition( 0, 100, xpos - xStart, xSpan ) * 0.01
+                color.setHsvF( h, s, v, 0.5 )
+                pen.setColor( color )
+                painter.setPen( pen )
+                painter.drawLine( xpos, 20 + idx * 30 - 10, xpos, 20 + idx * 30 + 10 )
+        
+        pen.setColor( QColor( "red" ) )
+        pen.setWidth( 2.5 )
+        painter.setPen( pen )
         for idx, tup in enumerate(allHsvs):
             if idx == currentIndex:
-                continue
+                continue            
             h, s, v = tup
             vInt = int( 100 * v )
             xDiff = QStyle.sliderPositionFromValue( 0, 100, vInt, xSpan )
@@ -49,8 +59,7 @@ class ColorWheelValues( QWidget ):
             painter.drawText( qp + QPoint( 5, 10 ), "%d" % ( idx + 1 ) )
             painter.drawLine( xStart, 20 + idx * 30, xEnd, 20 + idx * 30 )
 
-        color = QColor( "brown" )
-        pen.setColor( color )
+        pen.setColor( QColor( "orange" ) )
         painter.setPen( pen )
         for idx, tup in enumerate(allHsvs):
             if idx != currentIndex:

@@ -78,9 +78,9 @@ class ColorWheelAll( QMainWindow ):
         centerLayout.addWidget( self._layoutLeftWidget( ) )
         centerLayout.addWidget( self._layoutRightWidget( ) )
         self.setCentralWidget( centerWidget )
-        #
-        self.setSizePolicy( QSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed ) )
         self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint )
+        self.layout().setSizeConstraint( QLayout.SetFixedSize )
+        # self.setSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed )
         #
         ## actions
         removeColorAction = QAction( self )
