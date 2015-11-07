@@ -65,6 +65,7 @@ class ColorWheelResource( object ):
             self._fontNames = set([])
             self._colorwheel = [  QColor(name) for name in ( '#E5EDE9', '#EDE6CE', '#EDDFEB',
                                                              '#F1EDFE', '#CCD9FD', '#F9EBFD' ) ]
+            self._icons = {}
             fontNames = []
             for cssFile in glob.glob( os.path.join( mainPath, 'css', '*.css' ) ):
                 keyName = os.path.basename( cssFile ).replace('.css', '').strip()
@@ -72,10 +73,17 @@ class ColorWheelResource( object ):
                 qFile.open( QIODevice.ReadOnly )                
                 self._styleSheets[ keyName ] = QString( qFile.readAll( ) )
                 qFile.close()
+            #
             for fontFile in glob.glob( os.path.join( mainPath, 'fonts', '*.ttf' ) ):
                 fontName = os.path.basename( fontFile ).replace('.ttf', '').strip()
                 QFontDatabase.addApplicationFont( fontFile )
             numFonts = len( glob.glob( os.path.join( mainPath, 'fonts', '*.ttf' ) ) )
+            #
+            for iconFile in glob.glob( os.path.join( mainPath, 'icons', '*.svg' ) ):
+                iconName = os.path.basename( iconFile ).replace( '.svg', '').strip( )
+                icon = QIcon( )
+                icon.addFile( iconFile, size = QSize( 250, 250 ) )
+                self._icons[ iconName ] = icon
             ffams = set(reduce(lambda x, y: x + y, [ list( QFontDatabase.applicationFontFamilies(idx) ) for
                                                      idx in xrange(numFonts) ] ) )
             self._fontNames = set( [ str( tok ) for tok in ffams ] )
@@ -92,6 +100,13 @@ class ColorWheelResource( object ):
         def getStyleSheet( self, name ):
             assert( name in self._styleSheets )
             return self._styleSheets[ name ]
+
+        def getIcons( self ):
+            return sorted( self._icons )
+
+        def getIcon( self, name ):
+            assert( name in self._icons )
+            return self._icons[ name ]
 
     _instance = None
 

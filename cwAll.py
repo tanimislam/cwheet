@@ -5,6 +5,7 @@ from cwTable import ColorWheelTable
 from cwSlider import ColorWheelSlider
 from cwButtons import ColorWheelButtons
 from cwMenubar import ColorWheelMenuBar
+from cwResources import ColorWheelResource
 import sys, math, os
 
 class ColorWheelAll( QMainWindow ):
@@ -57,6 +58,8 @@ class ColorWheelAll( QMainWindow ):
     def __init__(self, mainWidth = 30, mainDiameter = 256 ):
         super(ColorWheelAll, self).__init__()
         self.setWindowTitle( 'CWHEET v0.1 (Beta)' )
+        cwr = ColorWheelResource( )
+        self.setWindowIcon( cwr.getIcon( 'cwheet-icon' ) )
         #
         self.hsvs = [ [ 0, 0.0, 1.0 ] ]
         self.currentIndex = -1

@@ -1,0 +1,36 @@
+<svg width="640" height="480" xmlns="http://www.w3.org/2000/svg">
+  <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+  <defs>
+    <radialGradient fy="0.289063" fx="0.671875" r="0.5" cy="0.289063" cx="0.671875" id="svg_3">
+      <stop stop-color="#0800ff" offset="0"/>
+      <stop stop-color="#bf00bf" offset="1"/>
+    </radialGradient>
+    <radialGradient fy="0.289063" fx="0.671875" r="0.5" cy="0.289063" cx="0.671875" id="svg_6">
+      <stop stop-color="#5656ff" offset="0"/>
+      <stop stop-color="#ffffff" offset="1"/>
+    </radialGradient>
+    <radialGradient fy="0.761719" fx="0.1875" r="1.012245" cy="0.761719" cx="0.1875" id="svg_10">
+      <stop stop-color="#ffffff" offset="0"/>
+      <stop stop-color="#7ebc85" offset="1"/>
+    </radialGradient>
+    <filter height="200%" width="200%" y="-50%" x="-50%" id="svg_15_blur">
+      <feGaussianBlur stdDeviation="3.3" in="SourceGraphic"/>
+    </filter>
+    <filter id="label_blur">
+      <feGaussianBlur stdDeviation="1.6" in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g>
+    <title>Layer 1</title>
+    <g transform="rotate(90 149.5,149.50000000000003) " filter="url(#svg_15_blur)" id="svg_15">
+      <ellipse id="svg_12" ry="74.499995" rx="74.499995" cy="149.499993" cx="149.499988" stroke-width="5" stroke="url(#svg_3)" fill="#fcfcfc"/>
+      <ellipse id="svg_13" ry="67.049996" rx="67.049996" cy="149.499993" cx="149.499988" stroke-width="5" stroke="url(#svg_6)" fill="#efefc4"/>
+      <ellipse id="svg_14" transform="matrix(-1.489999909442048,0,0,-1.489999909442048,1121.1171949567472,544.7385969647049) " ry="40" rx="40" cy="265.260824" cx="652.092125" stroke-width="5" stroke="url(#svg_10)" fill="#d8edc4"/>
+    </g>
+    <ellipse ry="50" rx="50" id="big_circle" cy="150" cx="150" stroke-width="5" stroke="url(#svg_3)" fill="#fcfcfc"/>
+    <ellipse id="svg_4" ry="45" rx="45" cy="150" cx="150" stroke-width="5" stroke="url(#svg_6)" fill="#efefc4"/>
+    <ellipse id="big_circle_2" ry="40" rx="40" cy="150" cx="150" stroke-width="5" stroke="url(#svg_10)" fill="#d8edc4"/>
+    <text filter="url(#label_blur)" font-weight="bold" xml:space="preserve" text-anchor="middle" font-family="Monospace" font-size="29" id="label" y="220" x="151" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="url(#svg_10)" fill="#ff7f00">cwheet!</text>
+    <text opacity="0.85" font-weight="bold" xml:space="preserve" text-anchor="middle" font-family="Monospace" font-size="29" id="svg_17" y="223" x="155" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="url(#svg_10)" fill="#0000ff">cwheet!</text>
+  </g>
+</svg>
