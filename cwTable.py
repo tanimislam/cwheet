@@ -67,6 +67,7 @@ class ColorWheelTableModel( QAbstractTableModel ):
         if col == 0:
             return
         elif col == 1:
+            print 'HMM'
             self.colorNames[ row ] = str( value.toString() )
         elif col == 2:
             name = str( value.toString() )
@@ -285,6 +286,8 @@ class NameDelegate(QItemDelegate):
             editor.setText( currName )
         else:
             model.colorNames[ rowNumber ] = candText
+            model.parent.cws.setTransform( )
+            model.parent.update( )
 
 class HexColorDelegate(QItemDelegate):
     def __init__(self, owner):

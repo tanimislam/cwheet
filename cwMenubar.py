@@ -11,8 +11,6 @@ class ColorWheelExpandedColorSwatch( QWidget ):
         self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint | Qt.Window )
         self.setSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed )
         self.setWindowTitle( 'EXPANDED COLOR SWATCH' )
-        self.prevWidth = -1
-        self.prevHeight = -1
         #
         ## hide window action
         hideAction = QAction( self )
@@ -25,13 +23,10 @@ class ColorWheelExpandedColorSwatch( QWidget ):
 
     def paintEvent( self, evt ):
         colorNames = self.parent.cwt.getColorNames( )
-        numCols = int( numpy.sqrt( len( colorNames ) * 1.0 ) ) # candidate number of cols
-        if len( colorNames ) % numCols != 0:
-            numCols += 1
+        numCols = int( numpy.sqrt( len( colorNames ) * 1.0 ) ) + 1 # candidate number of cols
         numRows, rem = divmod( len( colorNames ), numCols )
         if rem != 0:
             numRows += 1
-        print 'GOT HERE IN PAINT!', len( colorNames ), numRows, numCols
         allHsvs = self.parent.getTransformedHsvs( )
         painter = QPainter( self )
         painter.setRenderHint( QPainter.Antialiasing )
@@ -39,14 +34,10 @@ class ColorWheelExpandedColorSwatch( QWidget ):
         ## now set the image
         width = 170 * numCols
         height = 170 * numRows
-        if width != self.prevWidth or height != self.prevHeight:
-            print 'GOT HERE!'
-            self.setFixedSize( width, height )
-            image = QImage( width, height, QImage.Format_ARGB32 )
-            image.fill( QColor( "white" ).rgb( ) )
-            painter.drawImage( 0, 0, image )
-            self.prevWidth = width
-            self.prevHeight = height
+        self.setFixedSize( width, height )
+        image = QImage( width, height, QImage.Format_ARGB32 )
+        image.fill( QColor( "white" ).rgb( ) )
+        painter.drawImage( 0, 0, image )
         #
         ## now do your plotting
         color = QColor( )
@@ -56,11 +47,10 @@ class ColorWheelExpandedColorSwatch( QWidget ):
             h, s, v = tup
             color.setHsvF( h, s, v, 1.0 )
             brush.setColor( color )
-            painter.setBrush( brush )
-            painter.drawRect( 10 + 170 * row, 10 + 170 * col, 150, 150 )
+            painter.fillRect( 10 + 170 * col, 10 + 170 * row, 150, 150, color )
         font = QFont( )
         font.setFamily( 'Alef' )
-        font.setPointSize( 12 )
+        font.setPointSize( 14 )
         font.setBold( True )
         painter.setFont( font )
         pen = QPen( )
@@ -68,7 +58,7 @@ class ColorWheelExpandedColorSwatch( QWidget ):
         painter.setPen( pen )
         for idx, colorname in enumerate( colorNames ):
             row, col = divmod( idx, numCols )
-            painter.drawText( QRect( 10 + 170 * row, 10 + 170 * col, 150, 150 ),
+            painter.drawText( QRect( 10 + 170 * col, 10 + 170 * row, 150, 150 ),
                               Qt.AlignCenter, colorname )
         
 
@@ -81,13 +71,18 @@ class ColorWheelMenuBar( QMenuBar ):
         self.saveAction = fileMenu.addAction('&Save CSS' )
         openAction = fileMenu.addAction('&Open CSS' )
         openURLAction = fileMenu.addAction('&Open URL CSS')
+        quitAction = fileMenu.addAction( '&Quit' )
+        screenshotAction = fileMenu.addAction( '&Screenshot' )
         #
         opsMenu = self.addMenu( '&Operations' )
         showExpandedColorSwatchAction = opsMenu.addAction('&Expanded Color Swatch' )
         self._expandedColorSwatch = ColorWheelExpandedColorSwatch( parent )
+        transformAction = opsMenu.addAction('&Set Transform')
+        snapBackAction = opsMenu.addAction('&Snap Back')
+        removeColorAction = opsMenu.addAction( '&Remove Color' )
         #
-        helpMenu = self.addAction( '&Help' )
-        aboutMenu = self.addAction( '&About' )
+        helpAction = self.addAction( '&Help' )
+        aboutAction = self.addAction( '&About' )
         #
         ## actions
         self.saveAction.setShortcut('Shift+Ctrl+S')
@@ -96,9 +91,23 @@ class ColorWheelMenuBar( QMenuBar ):
         openAction.triggered.connect( self.openCSSFile )
         openURLAction.setShortcut('Shift+Ctrl+U')
         openURLAction.triggered.connect( self.openCSSURLFile )
+        screenshotAction.setShortcut( 'Shift+Ctrl+1' )
+        screenshotAction.triggered.connect( self.parent.takeScreenshot )
+        quitAction.setShortcut( 'Ctrl+Q' )
+        quitAction.triggered.connect( qApp.quit )
+        #
+        showExpandedColorSwatchAction.setShortcut( 'Shift+Ctrl+W' )
         showExpandedColorSwatchAction.triggered.connect( self.expandColorSwatchAction )
+        snapBackAction.setShortcut( 'Ctrl+Y' )
+        snapBackAction.triggered.connect( self.parent.cws.snapBack )
+        transformAction.setShortcut( 'Shift+Ctrl+T' )
+        transformAction.triggered.connect( self.parent.cws.setTransform )
+        removeColorAction.setShortcut( 'Ctrl+Z' )
+        removeColorAction.triggered.connect( self.parent.removeColor )
         
-
+    def paintEvent( self, evt ):
+        self._expandedColorSwatch.update( )
+        
     def enableSaveAction( self ):
         self.saveAction.setEnabled( True )
         
@@ -110,6 +119,7 @@ class ColorWheelMenuBar( QMenuBar ):
             return
         if not self._expandedColorSwatch.isVisible( ):
             self._expandedColorSwatch.setVisible( True )
+            
     def openCSSURLFile( self ):
         while(True):
             myURL, ok = QInputDialog.getText( self, 'Open CSS URL. Can end by pressing cancel or by putting in blank.',
@@ -129,13 +139,11 @@ class ColorWheelMenuBar( QMenuBar ):
         except ValueError:
             error = QErrorMessage( )
             
-            
-                                              
-
     def openCSSFile( self ):
         while( True ):
             fname = str( QFileDialog.getOpenFileName( self, 'Open CSS File',
-                                                      os.path.expanduser( '~' ),
+                                                      os.path.expanduser( __file__ ),
+                                                      #os.path.expanduser( '~' ),
                                                       filter = "*.css" ) )
             if fname.lower().endswith('.css') or len( os.path.basename( fname ) ) == 0:
                 break

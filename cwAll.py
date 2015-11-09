@@ -84,31 +84,17 @@ class ColorWheelAll( QMainWindow ):
         self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint )
         self.layout().setSizeConstraint( QLayout.SetFixedSize )
         # self.setSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed )
-        #
-        ## actions
-        removeColorAction = QAction( self )
-        removeColorAction.setShortcut( 'Ctrl+Z' )
-        removeColorAction.triggered.connect( self.removeColor )
-        self.addAction( removeColorAction )
-        #
-        snapBackAction = QAction( self )
-        snapBackAction.setShortcut( 'Ctrl+Y' )
-        snapBackAction.triggered.connect( self.cws.snapBack )
-        self.addAction( snapBackAction )
-        #
-        quitAction = QAction( self )
-        quitAction.setShortcut( 'Ctrl+Q' )
-        quitAction.triggered.connect( qApp.quit )
-        self.addAction( quitAction )
-        #
-        screenshotAction = QAction( self )
-        screenshotAction.setShortcut( 'Shift+Ctrl+1' )
-        screenshotAction.triggered.connect( self.takeScreenshot )
-        self.addAction( screenshotAction )
 
     def takeScreenshot( self ):
-        p = QPixmap.grabWindow( self.winId( ) )
-        p.save( os.path.join( os.path.expanduser( '~/temp' ), 'cwheet_screenshot.png' ) )
+        while( True ):
+            fname = str( QFileDialog.getSaveFileName( self, 'Save Screen Shot',
+                                                      os.path.expanduser( '~' ),
+                                                      filter = "*.png" ) )
+            if fname.lower().endswith('.png') or len( os.path.basename( fname ) ) == 0:
+                break
+        if fname.lower().endswith( '.png' ):
+            p = QPixmap.grabWindow( self.winId( ) )
+            p.save( fname )
         
     def getTransformedHsvs( self ):
         rotVal = self.cws.rotationSlider.value() * 1.0 / 360.0
@@ -135,21 +121,6 @@ class ColorWheelAll( QMainWindow ):
     def pushNewColors( self, newHsvs ):
         self.currentIndex = -1
         self.hsvs = newHsvs[:]
-        
-
-    #
-    #def paintEvent(self, evt):
-    #    self.cww.update()
-    #    self.cwb.update()
-    #    self.cws.update()
-    #    self.cwbut.update()
-    #    self.cwv.update()
-    #
-    ## now set the coordinates
-    #hsvsCoords = [ QPoint( s * self.cww.master_radius * math.cos( 2 * math.pi * h ),
-    #                       -s * self.cww.master_radius * math.sin( 2 * math.pi * h ) ) + self.cww.center for
-    #               (h, s, v) in self.hsvs ]
-    #self.qrects = [ QRect( coord - QPoint(5, 5), coord + QPoint(5, 5) ) for coord in hsvsCoords ]
 
     def removeColor(self):
         if len( self.hsvs ) > 1:
