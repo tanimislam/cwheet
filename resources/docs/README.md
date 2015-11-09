@@ -74,5 +74,3 @@ SUPPORT
 You may contact the main developer, Tanim Islam, at
 [`tanim.islam@gmail.com`](mailto:tanim.islam@gmail.com). Please be
 gentle; he works on this in his free time.
-=======
->>>>>>> 65e57dd8831468d40ff109208a74a24712656ea0
