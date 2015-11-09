@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ---
 authors:
 - Tanim Islam
