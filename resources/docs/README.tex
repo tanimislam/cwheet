@@ -1,22 +1,22 @@
 \documentclass[]{article}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{amssymb,amsmath}
-\usepackage{ifxetex,ifluatex}
+\usepackage{lmodern, csquotes}
+\usepackage{amssymb, amsmath}
+\usepackage{ifxetex, ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[utf8]{inputenc}
+\usepackage[utf8]{inputenc}
 \else % if luatex or xelatex
-  \ifxetex
-    \usepackage{mathspec}
-    \usepackage{xltxtra,xunicode}
-  \else
-    \usepackage{fontspec}
-  \fi
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \newcommand{\euro}{€}
+\ifxetex
+\usepackage{mathspec}
+\usepackage{xltxtra,xunicode}
+\else
+\usepackage{fontspec}
+\fi
+\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+\newcommand{\euro}{€}
 \fi
 % use microtype if available
 \IfFileExists{microtype.sty}{\usepackage{microtype}}{}
@@ -28,81 +28,93 @@
   \usepackage[unicode=true]{hyperref}
 \fi
 \hypersetup{breaklinks=true,
-            bookmarks=true,
-            pdfauthor={},
-            pdftitle={},
-            colorlinks=true,
-            citecolor=blue,
-            urlcolor=blue,
-            linkcolor=magenta,
-            pdfborder={0 0 0}}
+  bookmarks=true,
+  pdfauthor={},
+  pdftitle={},
+  colorlinks=true,
+  citecolor=blue,
+  urlcolor=blue,
+  linkcolor=magenta,
+  pdfborder={0 0 0}}
 \urlstyle{same}  % don't use monospace font for urls
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt plus 2pt minus 1pt}
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 \setcounter{secnumdepth}{0}
 
-\author{}
-\date{}
+\author{Tanim Islam}
+\date{\today}
 
 \begin{document}
 
-\section{README}\label{readme}
+\section{INTRODUCTION}\label{introduction}
 
-This README would normally document whatever steps are necessary to get
-your application up and running.
+Hello World! This is the official \texttt{README} of the
+\href{https://bitbucket.org/tanim_islam/cwheet}{cwheet} (pronounced
+\textit{\textbf{shweet}}) Color Wheel tool. Here I document all the
+steps necessary to get started on using this tool. This is fairly
+rudimentary; I have just started to look at various other
+\texttt{README.md} files on \href{https://bitbucket.org}{Bitbucket},
+so please be understanding!
 
-\subsubsection{What is this repository
-for?}\label{what-is-this-repository-for}
-
+The \textbf{cwheet} Color Wheel Tool is a fairly simple way to load
+and create your own swatches of color for in CSS
+format. \href{http://www.sessions.edu/color-calculator}{The Online
+ Color Calculator} most closely matches the functionality of this
+tool. With this tool, one can
 \begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Quick summary
-\item
-  Version
-\item
-  \href{https://bitbucket.org/tutorials/markdowndemo}{Learn Markdown}
+  \item Create, load, and save color swatches.
+  \item Interactively modify colors in a color swatch by
+    \begin{itemize}
+      \item explicitly setting the color name and hex color definition
+        in a table.
+      \item dragging and clicking the selected color in an
+        \href{https://en.wikipedia.org/wiki/HSL_and_HSV}{HSV color
+          wheel} and color bar.        
+        \item Transforming all the colors in the swatch by rotating
+          through hue, increasing or decreasing saturation, or
+          changing the offset color value.
+    \end{itemize}
+  \item Change the scale of the currently loaded, interactive HSV
+    color wheel; and reset a selected color to white
+    (\texttt{\#FFFFFF}). 
 \end{itemize}
 
-\subsubsection{How do I get set up?}\label{how-do-i-get-set-up}
+This document was converted from a \LaTeX source using
+\href{http://pandoc.org/index.html}{\texttt{Pandoc}}, via
+\blockquote{\texttt{pandoc -s README.tex -o README.md}}.
 
+\section{INSTALLATION}
+No special installation is necessary to run this file. The
+requirements for this python package are located in
+\texttt{requirements.txt}. To install the requirements as an user, run
+the command:
+\blockquote{\texttt{pip --user --upgrade -r requirements.txt}}
+
+\section{REQUIREMENTS}
 \begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Summary of set up
-\item
-  Configuration
-\item
-  Dependencies
-\item
-  Database configuration
-\item
-  How to run tests
-\item
-  Deployment instructions
+  \item \href{http://pythonhosted.org/cssutils/}{\texttt{cssutils}}:
+    Useful python utility to parse CSS files.
+  \item
+    \href{https://www.riverbankcomputing.com/software/pyqt/intro}{\texttt{PyQt4}}
+    : Python bindings to the
+    \href{http://doc.qt.io/qt-4.8/index.html}{\texttt{Qt4}}
+    cross-platform toolkit.
+  \item\textit{implicitly}, the \href{http://doc.qt.io/qt-4.8/index.html}{\texttt{Qt4}}
+    cross-platform toolkit.
 \end{itemize}
 
-\subsubsection{Contribution guidelines}\label{contribution-guidelines}
-
+\section{TODO}
 \begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Writing tests
-\item
-  Code review
-\item
-  Other guidelines
+  \item Fully developed documentation, including nice demonstration
+    videos that demonstrate useful functionality.
+  \item Test cases on CSS files that others send to me.
+  \item The ability to have multiple color wheels within the GUI.
 \end{itemize}
 
-\subsubsection{Who do I talk to?}\label{who-do-i-talk-to}
-
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Repo owner or admin
-\item
-  Other community or team contact
-\end{itemize}
+\section{SUPPORT}
+You may contact the main developer, Tanim Islam, at
+\href{mailto:tanim.islam@gmail.com}{\texttt{tanim.islam@gmail.com}}. Please
+be gentle; he works on this in his free time.
 
 \end{document}
