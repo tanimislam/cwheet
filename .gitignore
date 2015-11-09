@@ -201,3 +201,6 @@ pythontex-files-*/
 # WinEdt
 *.bak
 *.sav
+
+# PDF files in docs directory
+resources/docs/*.pdf
