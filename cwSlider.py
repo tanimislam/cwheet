@@ -64,11 +64,11 @@ class ColorWheelSlider( QWidget ):
     
     def rotateColors( self ):
         self.rotationLabel.setText( "%03d" % self.rotationSlider.value() )
-        self.parent.update()
+        self.parent.update( )
 
     def scaleColors( self ):
         self.scalingLabel.setText( "%0.3f" % math.pow( 10.0, 0.01 * self.scalingSlider.value() ) )
-        self.parent.update()
+        self.parent.update( )
 
     def valueColors( self ):
         valDif = 0.01 * self.valueSlider.value()
@@ -76,6 +76,7 @@ class ColorWheelSlider( QWidget ):
             self.valueLabel.setText( "+%0.3f" % valDif )
         else:
             self.valueLabel.setText( "%0.3f" % valDif )
+        self.parent.update( )
             
     def snapBack(self):
         self.rotationSlider.setValue( 0 )

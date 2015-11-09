@@ -119,8 +119,10 @@ class ColorWheelAll( QMainWindow ):
         return newHsvs
 
     def pushNewColors( self, newHsvs ):
+        self.cws.setTransform( )
         self.currentIndex = -1
         self.hsvs = newHsvs[:]
+        self.update( )
 
     def removeColor(self):
         if len( self.hsvs ) > 1:
