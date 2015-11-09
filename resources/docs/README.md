@@ -36,7 +36,9 @@ matches the functionality of this tool. With this tool, one can
     wheel; and reset a selected color to white (`#FFFFFF`).
 
 This document was converted from a LaTeXsource using
-[`Pandoc`](http://pandoc.org/index.html), via .
+[`Pandoc`](http://pandoc.org/index.html), via
+
+    pandoc -s README.tex -o README.md
 
 INSTALLATION
 ============
@@ -44,6 +46,8 @@ INSTALLATION
 No special installation is necessary to run this file. The requirements
 for this python package are located in `requirements.txt`. To install
 the requirements as an user, run the command:
+
+    pip --user --upgrade -r requirements.txt
 
 REQUIREMENTS
 ============
