@@ -1,0 +1,44 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Alef:400,500,700");
+
+body {
+    background: #BAC0E4;
+}
+
+body,h1,h2,h3,h4,h5,div,p,blockquote,ol,ul,dl,li,dt,dd,td {
+    color: #eeeeee;
+    font-family: "Alef", Helvetica, sans-serif;
+}
+
+.root {
+    background: #8695CC;
+}
+
+.head {
+    background: #5866B1;
+}
+
+.menu {
+    background: #49538B;
+}
+
+.main {
+    background: #545CA0;
+}
+
+a:link {
+    color: #EEEEEE;
+}
+
+a:visited {
+    color: #EEEEEE;
+}
+
+a:active {
+    color: #EEEEEE;
+}
+
+a:hover {
+    color: #EEEEEE;
+    background: #9797b7;
+}
