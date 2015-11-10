@@ -1,278 +1,49 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="235"
-   height="235"
-   horiz-origin-x="60"
-   id="cwheet_icon"
-   version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="cwheet-icon.svg">
-  <metadata
-     id="metadata3472">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1488"
-     inkscape:window-height="1066"
-     id="namedview3470"
-     showgrid="false"
-     inkscape:zoom="1.3020833"
-     inkscape:cx="343.7"
-     inkscape:cy="230.532"
-     inkscape:window-x="1392"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="cwheet_icon"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0" />
+<svg width="170" height="170" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
-  <defs
-     id="defs3434">
-    <radialGradient
-       fy="0.28906301"
-       fx="0.671875"
-       r="0.5"
-       cy="0.28906301"
-       cx="0.671875"
-       id="svg_3">
-      <stop
-         stop-color="#0800ff"
-         offset="0"
-         id="stop3437" />
-      <stop
-         stop-color="#bf00bf"
-         offset="1"
-         id="stop3439" />
+  <metadata id="metadata3472">image/svg+xml</metadata>
+  <defs>
+    <radialGradient fy="0.28906" fx="0.67188" r="0.5" cy="0.28906" cx="0.67188" id="svg_3">
+      <stop stop-color="#0800ff" offset="0" id="stop3437"/>
+      <stop stop-color="#bf00bf" offset="1" id="stop3439"/>
     </radialGradient>
-    <radialGradient
-       fy="0.28906301"
-       fx="0.671875"
-       r="0.5"
-       cy="0.28906301"
-       cx="0.671875"
-       id="svg_6">
-      <stop
-         stop-color="#5656ff"
-         offset="0"
-         id="stop3442" />
-      <stop
-         stop-color="#ffffff"
-         offset="1"
-         id="stop3444" />
+    <radialGradient fy="0.28906" fx="0.67188" r="0.5" cy="0.28906" cx="0.67188" id="svg_6">
+      <stop stop-color="#5656ff" offset="0" id="stop3442"/>
+      <stop stop-color="#ffffff" offset="1" id="stop3444"/>
     </radialGradient>
-    <radialGradient
-       fy="0.76171899"
-       fx="0.1875"
-       r="1.0122451"
-       cy="0.76171899"
-       cx="0.1875"
-       id="svg_10">
-      <stop
-         stop-color="#ffffff"
-         offset="0"
-         id="stop3447" />
-      <stop
-         stop-color="#7ebc85"
-         offset="1"
-         id="stop3449" />
+    <radialGradient fy="0.76172" fx="0.1875" r="1.01225" cy="0.76172" cx="0.1875" id="svg_10">
+      <stop stop-color="#ffffff" offset="0" id="stop3447"/>
+      <stop stop-color="#7ebc85" offset="1" id="stop3449"/>
     </radialGradient>
-    <filter
-       height="2"
-       width="2"
-       y="-0.5"
-       x="-0.5"
-       id="svg_15_blur">
-      <feGaussianBlur
-         stdDeviation="3.3"
-         in="SourceGraphic"
-         id="feGaussianBlur3452" />
+    <filter height="2" width="2" y="-0.5" x="-0.5" id="svg_15_blur">
+      <feGaussianBlur stdDeviation="3.3" id="feGaussianBlur3452"/>
     </filter>
-    <filter
-       id="label_blur">
-      <feGaussianBlur
-         stdDeviation="1.6"
-         in="SourceGraphic"
-         id="feGaussianBlur3455" />
+    <filter id="label_blur">
+      <feGaussianBlur stdDeviation="1.6" id="feGaussianBlur3455"/>
     </filter>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#svg_3"
-       id="radialGradient3474"
-       cx="175.96873"
-       cy="117.01571"
-       fx="175.96873"
-       fy="117.01571"
-       r="76.999992"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#svg_6"
-       id="radialGradient3476"
-       cx="173.40781"
-       cy="120.15867"
-       fx="173.40781"
-       fy="120.15867"
-       r="69.549995"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#svg_10"
-       id="radialGradient3478"
-       cx="625.5296"
-       cy="287.50696"
-       fx="625.5296"
-       fy="287.50696"
-       r="86.040833"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#svg_3"
-       id="radialGradient3480"
-       cx="168.04688"
-       cy="127.85162"
-       fx="168.04688"
-       fy="127.85162"
-       r="52.5"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(1.115985,2.892)" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#svg_6"
-       id="radialGradient3482"
-       cx="166.32812"
-       cy="129.96098"
-       fx="166.32812"
-       fy="129.96098"
-       r="47.5"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(1.115985,2.892)" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#svg_10"
-       id="radialGradient3484"
-       cx="123.4375"
-       cy="172.24611"
-       fx="123.4375"
-       fy="172.24611"
-       r="86.040833"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(1.115985,2.892)" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#svg_10"
-       id="radialGradient3486"
-       cx="47.452461"
-       cy="485.01425"
-       fx="47.452461"
-       fy="485.01425"
-       r="61.148769"
-       gradientTransform="matrix(2.2429701,0,0,0.44583742,1.115985,2.892)"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#svg_10"
-       id="radialGradient3488"
-       cx="52.382114"
-       cy="489.10812"
-       fx="52.382114"
-       fy="489.10812"
-       r="50.957306"
-       gradientTransform="matrix(2.2429701,0,0,0.44583742,1.115985,2.892)"
-       gradientUnits="userSpaceOnUse" />
+    <radialGradient xlink:href="#svg_3" id="radialGradient3474" cx="175.96873" cy="117.01571" fx="175.96873" fy="117.01571" r="76.99999" gradientUnits="userSpaceOnUse"/>
+    <radialGradient xlink:href="#svg_6" id="radialGradient3476" cx="173.40781" cy="120.15867" fx="173.40781" fy="120.15867" r="69.54999" gradientUnits="userSpaceOnUse"/>
+    <radialGradient xlink:href="#svg_10" id="radialGradient3478" cx="625.5296" cy="287.50696" fx="625.5296" fy="287.50696" r="86.04083" gradientUnits="userSpaceOnUse"/>
+    <radialGradient xlink:href="#svg_3" id="radialGradient3480" cx="168.04688" cy="127.85162" fx="168.04688" fy="127.85162" r="52.5" gradientUnits="userSpaceOnUse" gradientTransform="translate(1.115985,2.892)"/>
+    <radialGradient xlink:href="#svg_6" id="radialGradient3482" cx="166.32812" cy="129.96098" fx="166.32812" fy="129.96098" r="47.5" gradientUnits="userSpaceOnUse" gradientTransform="translate(1.115985,2.892)"/>
+    <radialGradient xlink:href="#svg_10" id="radialGradient3484" cx="123.4375" cy="172.24611" fx="123.4375" fy="172.24611" r="86.04083" gradientUnits="userSpaceOnUse" gradientTransform="translate(1.115985,2.892)"/>
+    <radialGradient xlink:href="#svg_10" id="radialGradient3486" cx="47.45246" cy="485.01425" fx="47.45246" fy="485.01425" r="61.14877" gradientTransform="matrix(2.2429701,0,0,0.44583742,1.115985,2.892)" gradientUnits="userSpaceOnUse"/>
+    <radialGradient xlink:href="#svg_10" id="radialGradient3488" cx="52.38211" cy="489.10812" fx="52.38211" fy="489.10812" r="50.95731" gradientTransform="matrix(2.2429701,0,0,0.44583742,1.115985,2.892)" gradientUnits="userSpaceOnUse"/>
   </defs>
-  <g
-     id="g3508"
-     transform="translate(-1.61599,-3.392)">
-    <g
-       transform="matrix(0,1,-1,0,300.11599,2.892)"
-       id="svg_15"
-       style="filter:url(#svg_15_blur)">
-      <circle
-         id="svg_12"
-         cy="149.5"
-         cx="149.5"
-         r="74.5"
-         style="fill:#fcfcfc;stroke:url(#radialGradient3474);stroke-width:5" />
-      <circle
-         id="svg_13"
-         cy="149.5"
-         cx="149.5"
-         r="67.050003"
-         style="fill:#efefc4;stroke:url(#radialGradient3476);stroke-width:5" />
-      <circle
-         id="svg_14"
-         transform="matrix(-1.4899999,0,0,-1.4899999,1121.1172,544.7386)"
-         cy="265.26083"
-         cx="652.0921"
-         r="40"
-         style="fill:#d8edc4;stroke:url(#radialGradient3478);stroke-width:5" />
-    </g>
-    <g
-       id="g3501">
-      <circle
-         style="fill:#fcfcfc;stroke:url(#radialGradient3480);stroke-width:5"
-         r="50"
-         cx="151.11598"
-         cy="152.892"
-         id="big_circle" />
-      <circle
-         style="fill:#efefc4;stroke:url(#radialGradient3482);stroke-width:5"
-         r="45"
-         cx="151.11598"
-         cy="152.892"
-         id="svg_4" />
-      <circle
-         style="fill:#d8edc4;stroke:url(#radialGradient3484);stroke-width:5"
-         r="40"
-         cx="151.11598"
-         cy="152.892"
-         id="big_circle_2" />
-      <text
-         style="font-weight:bold;font-size:29px;font-family:Monospace;text-anchor:middle;fill:#ff7f00;stroke:url(#radialGradient3486);stroke-width:0;filter:url(#label_blur)"
-         stroke-linejoin="null"
-         stroke-linecap="null"
-         x="152.11598"
-         y="222.892"
-         id="label"
-         font-size="29"
-         xml:space="preserve"
-         font-weight="bold">cwheet!</text>
-      <text
-         style="font-weight:bold;font-size:29px;font-family:Monospace;text-anchor:middle;opacity:0.85;fill:#0000ff;stroke:url(#radialGradient3488);stroke-width:0"
-         stroke-linejoin="null"
-         stroke-linecap="null"
-         x="156.11598"
-         y="225.892"
-         id="svg_17"
-         font-size="29"
-         xml:space="preserve"
-         font-weight="bold">cwheet!</text>
+  <g>
+    <title>Layer 1</title>
+    <g id="cwheet_icon">
+      <g id="svg_15" filter="url(#svg_15_blur)">
+	<circle id="svg_12" cy="215.61599" cx="81.608002" r="74.5" stroke-width="5" stroke="url(#radialGradient3474)" fill="#fcfcfc" transform="matrix(0,1,-1,0,300.11599,2.892) "/>
+	<circle id="svg_13" cy="215.61599" cx="81.608002" r="67.050003" stroke-width="5" stroke="url(#radialGradient3476)" fill="#efefc4" transform="matrix(0,1,-1,0,300.11599,2.892) "/>
+	<circle id="svg_14" transform="matrix(0,-1.4899999,1.4899999,0,-244.62261,1124.0092) " cy="220.887684" cx="697.657205" r="40" stroke-width="5" stroke="url(#radialGradient3478)" fill="#d8edc4"/>
+      </g>
+      <g id="g3501">
+	<circle r="50" cx="84.99999" cy="85.000002" id="big_circle" stroke-width="5" stroke="url(#radialGradient3480)" fill="#fcfcfc"/>
+	<circle r="45" cx="84.99999" cy="85.000002" id="svg_4" stroke-width="5" stroke="url(#radialGradient3482)" fill="#efefc4"/>
+	<circle r="40" cx="84.99999" cy="85.000002" id="big_circle_2" stroke-width="5" stroke="url(#radialGradient3484)" fill="#d8edc4"/>
+	<text stroke-linejoin="null" stroke-linecap="null" x="85.99999" y="155.000002" id="label" font-size="29px" xml:space="preserve" font-weight="bold" filter="url(#label_blur)" stroke-width="0" stroke="url(#radialGradient3486)" fill="#ff7f00" text-anchor="middle" font-family="Monospace">cwheet!</text>
+	<text stroke-linejoin="null" stroke-linecap="null" x="89.99999" y="158.000002" id="svg_17" font-size="29px" xml:space="preserve" font-weight="bold" stroke-width="0" stroke="url(#radialGradient3488)" fill="#0000ff" opacity="0.85" text-anchor="middle" font-family="Monospace">cwheet!</text>
+      </g>
     </g>
   </g>
 </svg>
