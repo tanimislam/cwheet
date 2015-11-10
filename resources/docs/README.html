@@ -1,49 +1,85 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Content-Style-Type" content="text/css" />
-    <meta name="generator" content="pandoc" />
-    <title></title>
-    <style type="text/css">code{white-space: pre;}</style>
-  </head>
-  <body>
-    <h1 id="introduction">INTRODUCTION</h1>
-    <p>Hello World! This is the official <code>README</code> of the <a href="https://bitbucket.org/tanim_islam/cwheet">cwheet</a> (pronounced <em><strong>shweet</strong></em>) Color Wheel tool. Here I document all the steps necessary to get started on using this tool. This is fairly rudimentary; I have just started to look at various other <code>README.md</code> files on <a href="https://bitbucket.org">Bitbucket</a>, so please be understanding!</p>
-    <p>The <strong>cwheet</strong> Color Wheel Tool is a fairly simple way to load and create your own swatches of color for in CSS format. <a href="http://www.sessions.edu/color-calculator">The Online Color Calculator</a> most closely matches the functionality of this tool. With this tool, one can</p>
-    <ul>
-      <li><p>Create, load, and save color swatches.</p></li>
-      <li><p>Interactively modify colors in a color swatch by</p>
-	<ul>
-	  <li><p>explicitly setting the color name and hex color definition in a table.</p></li>
-	  <li><p>dragging and clicking the selected color in an <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSV color wheel</a> and color bar.</p></li>
-	  <li><p>Transforming all the colors in the swatch by rotating through hue, increasing or decreasing saturation, or changing the offset color value.</p></li>
-      </ul></li>
-      <li><p>Change the scale of the currently loaded, interactive HSV color wheel; and reset a selected color to white (<code>#FFFFFF</code>).</p></li>
-    </ul>
-    <p>This document was converted from a LaTeXsource using <a href="http://pandoc.org/index.html"><code>Pandoc</code></a>, via</p>
-    <pre><code>pandoc -s README.tex -o README.md</code></pre>
-    <h1 id="installation">INSTALLATION</h1>
-    <p>No special installation is necessary to run this file. The requirements for this python package are located in <code>requirements.txt</code>. To install the requirements as an user, run the command:</p>
-    <pre><code>pip --user --upgrade -r requirements.txt</code></pre>
-    <h1 id="requirements">REQUIREMENTS</h1>
-    <ul>
-      <li><p><a href="http://pythonhosted.org/cssutils/"><code>cssutils</code></a>: Useful python utility to parse CSS files.</p></li>
-      <li><p><a href="https://www.riverbankcomputing.com/software/pyqt/intro"><code>PyQt4</code></a> : Python bindings to the <a href="http://doc.qt.io/qt-4.8/index.html"><code>Qt4</code></a> cross-platform toolkit.</p></li>
-      <li><p><em>implicitly</em>, the <a href="http://doc.qt.io/qt-4.8/index.html"><code>Qt4</code></a> cross-platform toolkit.</p></li>
-    </ul>
-    <h1 id="todo">TODO</h1>
-    <ul>
-      <li><p>Fully developed documentation, including nice demonstration videos that demonstrate useful functionality.</p></li>
-      <li><p>Test cases on CSS files that others send to me.</p></li>
-      <li><p>The ability to have multiple color wheels within the GUI.</p></li>
-    </ul>
-    <h1 id="support">SUPPORT</h1>
-    <p>You may contact the main developer, Tanim Islam, at <script type="text/javascript">
-	<!--
-	    h='&#x67;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#116;&#x61;&#110;&#x69;&#x6d;&#46;&#x69;&#x73;&#108;&#x61;&#x6d;';e=n+a+h;
-	    document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+'<code>tanim.islam@gmail.com</code>'+'<\/'+'a'+'>');
-	    // -->
-      </script><noscript>&#60;&#x63;&#x6f;&#100;&#x65;&#62;&#116;&#x61;&#110;&#x69;&#x6d;&#46;&#x69;&#x73;&#108;&#x61;&#x6d;&#64;&#x67;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;&#60;&#x2f;&#x63;&#x6f;&#100;&#x65;&#62;&#32;&#40;&#116;&#x61;&#110;&#x69;&#x6d;&#46;&#x69;&#x73;&#108;&#x61;&#x6d;&#32;&#x61;&#116;&#32;&#x67;&#x6d;&#x61;&#x69;&#108;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#x6f;&#x6d;&#x29;</noscript>. Please be gentle; he works on this in his free time.</p>
-  </body>
-</html>
+<hr>
+<p>authors:
+- Tanim Islam
+...</p>
+<h1>INTRODUCTION</h1>
+<p>Hello World! This is the official <code>README</code> of the
+<a href="https://bitbucket.org/tanim_islam/cwheet">cwheet</a> (pronounced
+<strong><em>shweet</em></strong>) Color Wheel tool. Here I document all the steps necessary
+to get started on using this tool. This is fairly rudimentary; I have
+just started to look at various other <code>README.md</code> files on
+<a href="https://bitbucket.org">Bitbucket</a>, so please be understanding!</p>
+<p>The <strong>cwheet</strong> Color Wheel Tool is a fairly simple way to load and
+create your own swatches of color for in CSS format. <a href="http://www.sessions.edu/color-calculator">The Online Color
+Calculator</a> most closely
+matches the functionality of this tool. With this tool, one can</p>
+<ul>
+<li>
+<p>Create, load, and save color swatches.</p>
+</li>
+<li>
+<p>Interactively modify colors in a color swatch by</p>
+<ul>
+<li>
+<p>explicitly setting the color name and hex color definition in a
+    table.</p>
+</li>
+<li>
+<p>dragging and clicking the selected color in an <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSV color
+    wheel</a> and color bar.</p>
+</li>
+<li>
+<p>Transforming all the colors in the swatch by rotating through
+    hue, increasing or decreasing saturation, or changing the offset
+    color value.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Change the scale of the currently loaded, interactive HSV color
+    wheel; and reset a selected color to white (<code>#FFFFFF</code>).</p>
+</li>
+</ul>
+<p>This document was converted from a LaTeXsource using
+<a href="http://pandoc.org/index.html"><code>Pandoc</code></a>, via</p>
+<pre><code>pandoc -s README.tex -o README.md
+</code></pre>
+<h1>INSTALLATION</h1>
+<p>No special installation is necessary to run this file. The requirements
+for this python package are located in <code>requirements.txt</code>. To install
+the requirements as an user, run the command:</p>
+<pre><code>pip --user --upgrade -r requirements.txt
+</code></pre>
+<h1>REQUIREMENTS</h1>
+<ul>
+<li>
+<p><a href="http://pythonhosted.org/cssutils/"><code>cssutils</code></a>: Useful python
+    utility to parse CSS files.</p>
+</li>
+<li>
+<p><a href="https://www.riverbankcomputing.com/software/pyqt/intro"><code>PyQt4</code></a> :
+    Python bindings to the <a href="http://doc.qt.io/qt-4.8/index.html"><code>Qt4</code></a>
+    cross-platform toolkit.</p>
+</li>
+<li>
+<p><em>implicitly</em>, the <a href="http://doc.qt.io/qt-4.8/index.html"><code>Qt4</code></a>
+    cross-platform toolkit.</p>
+</li>
+</ul>
+<h1>TODO</h1>
+<ul>
+<li>
+<p>Fully developed documentation, including nice demonstration videos
+    that demonstrate useful functionality.</p>
+</li>
+<li>
+<p>Test cases on CSS files that others send to me.</p>
+</li>
+<li>
+<p>The ability to have multiple color wheels within the GUI.</p>
+</li>
+</ul>
+<h1>SUPPORT</h1>
+<p>You may contact the main developer, Tanim Islam, at
+<a href="mailto:tanim.islam@gmail.com"><code>tanim.islam@gmail.com</code></a>. Please be
+gentle; he works on this in his free time.</p>
