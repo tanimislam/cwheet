@@ -79,11 +79,9 @@ class ColorWheelResource( object ):
                 QFontDatabase.addApplicationFont( fontFile )
             numFonts = len( glob.glob( os.path.join( mainPath, 'fonts', '*.ttf' ) ) )
             #
-            for iconFile in glob.glob( os.path.join( mainPath, 'icons', '*.svg' ) ):
-                iconName = os.path.basename( iconFile ).replace( '.svg', '').strip( )
-                icon = QIcon( )
-                icon.addFile( iconFile, size = QSize( 250, 250 ) )
-                self._icons[ iconName ] = icon
+            for iconFile in glob.glob( os.path.join( mainPath, 'icons', '*.png' ) ):
+                iconName = os.path.basename( iconFile ).replace( '.png', '').strip( )
+                self._icons[ iconName ] = QIcon( iconFile )
             ffams = set(reduce(lambda x, y: x + y, [ list( QFontDatabase.applicationFontFamilies(idx) ) for
                                                      idx in xrange(numFonts) ] ) )
             self._fontNames = set( [ str( tok ) for tok in ffams ] )
