@@ -1,7 +1,6 @@
 ---
-author:
-- Tanim Islam
-css: 'pandoc-github.css'
+author: Tanim Islam
+generator: pandoc
 ...
 
 INTRODUCTION
