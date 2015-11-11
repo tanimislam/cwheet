@@ -1,0 +1,11 @@
+QLabel {
+  font-family: Alef;
+}
+
+QLabel:hover:!pressed {
+  background-color: #FFDBBF;
+}
+
+QLabel:pressed {
+  background-color: red;
+}
