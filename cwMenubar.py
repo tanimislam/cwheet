@@ -136,38 +136,28 @@ class ColorWheelMenuBar( QMenuBar ):
         css = None
         try:
             css = cssutils.parseURL( myURL )
+            self.parent.pushNewColorsFromCSS( css )
         except ValueError:
             error = QErrorMessage( )
             
     def openCSSFile( self ):
         while( True ):
             fname = str( QFileDialog.getOpenFileName( self, 'Open CSS File',
-                                                      os.path.expanduser( __file__ ),
-                                                      #os.path.expanduser( '~' ),
+                                                      #os.path.expanduser( __file__ ),
+                                                      os.path.expanduser( '~' ),
                                                       filter = "*.css" ) )
             if fname.lower().endswith('.css') or len( os.path.basename( fname ) ) == 0:
                 break
         if fname.lower().endswith('.css'):
             css = cssutils.parseFile( fname )
             try:
-                colorNamesDict = cwResources.getBackgroundColorDict( css )
-                colorLabels = sorted( colorNamesDict.keys() )
-                colors = [ ]
-                self.parent.cws.snapBack( )
-                for name in colorLabels:
-                    colorName = colorNamesDict[ name ]
-                    color = QColor( colorName )
-                    h, s, v, a = color.getHsvF( )
-                    colors.append([ h, s, v ])
-                self.parent.pushNewColors( colors )
-                self.parent.cwt.pushData( colorLabels )
-                self.parent.update( )
+                self.parent.pushNewColorsFromCSS( css )
             except ValueError:
                 error = QErrorMessage()
                 message = ' '.join([ 
-                         "Error, do not have an unique set of colors defined here."
-                         "Problem with file %s." % fname,
-                         "Please try again with another CSS file." ])
+                    "Error, do not have an unique set of colors defined here."
+                    "Problem with file %s." % fname,
+                    "Please try again with another CSS file." ])
                 error.showMessage( message )
                 error.exec_()
 

@@ -134,6 +134,20 @@ class ColorWheelAll( QMainWindow ):
             self.currentIndex = -1    
             self.update()
 
+    def pushNewColorsFromCSS( self, css ):
+        colorNamesDict = cwResources.getBackgroundColorDict( css )
+        colorLabels = sorted( colorNamesDict.keys() )
+        colors = [ ]
+        self.parent.cws.snapBack( )
+        for name in colorLabels:
+            colorName = colorNamesDict[ name ]
+            color = QColor( colorName )
+            h, s, v, a = color.getHsvF( )
+            colors.append([ h, s, v ])
+        self.pushNewColors( colors )
+        self.cwt.pushData( colorLabels )
+        self.update( )
+
 if __name__=='__main__':
     app = QApplication([])
     cwa = ColorWheelAll(mainDiameter = 325 )
