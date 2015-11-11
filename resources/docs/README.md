@@ -1,6 +1,6 @@
 ---
-authors:
-- Tanim Islam
+author: Tanim Islam
+generator: pandoc
 ...
 
 INTRODUCTION
@@ -22,8 +22,8 @@ matches the functionality of this tool. With this tool, one can
 
 -   Interactively modify colors in a color swatch by
 
-    -   explicitly setting the color name and hex color definition in a
-        table.
+    -   explicitly setting the color name and hex color definition in
+        a table.
 
     -   dragging and clicking the selected color in an [HSV color
         wheel](https://en.wikipedia.org/wiki/HSL_and_HSV) and color bar.
