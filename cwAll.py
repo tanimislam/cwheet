@@ -5,7 +5,7 @@ from cwTable import ColorWheelTable
 from cwSlider import ColorWheelSlider
 from cwButtons import ColorWheelButtons
 from cwMenubar import ColorWheelMenuBar
-from cwResources import ColorWheelResource
+from cwResources import ColorWheelResource, getBackgroundColorDict
 import sys, math, os
 
 class ColorWheelAll( QMainWindow ):
@@ -135,10 +135,10 @@ class ColorWheelAll( QMainWindow ):
             self.update()
 
     def pushNewColorsFromCSS( self, css ):
-        colorNamesDict = cwResources.getBackgroundColorDict( css )
+        colorNamesDict = getBackgroundColorDict( css )
         colorLabels = sorted( colorNamesDict.keys() )
         colors = [ ]
-        self.parent.cws.snapBack( )
+        self.cws.snapBack( )
         for name in colorLabels:
             colorName = colorNamesDict[ name ]
             color = QColor( colorName )
