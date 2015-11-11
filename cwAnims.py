@@ -82,7 +82,8 @@ class RotationSliderAnimation( QWidget ):
         self.rotationSpeedDialog.returnPressed.connect( self.setRotationSpeed )
         self.startTimeDialog.returnPressed.connect( self.setStartTime )
         self.endTimeDialog.returnPressed.connect( self.setEndTime )
-        self.movieButton.clicked.connect( self.setMovieNameAndStart )
+        self.movieButton.clicked.connect( self.setMovieName )
+        self.cssButton.clicked.connect( self.setCSSFile )
         self.rotationSpeedSlider.valueChanged.connect( self.rotationSpeed )
         self.startTimeSlider.valueChanged.connect( self.startTime )
         self.endTimeSlider.valueChanged.connect( self.endTime )
@@ -138,8 +139,18 @@ class RotationSliderAnimation( QWidget ):
             pass
         self.endTime( )
 
-    def setMovieNameAndStart( self ):
+    def setMovieName( self ):
         print 'HELLO WORLD'
+
+    def setCSSFile( self ):
+        while( True ):
+            fname = str( QFileDialog.getOpenFileName( self, 'Open CSS File',
+                                                      os.path.expanduser( __file__ ),
+                                                      filter = "*.css" ) )
+            if fname.lower().endswith('.css') or len( os.path.basename( fname ) ) == 0:
+                break
+        if fname.lower().endswith( '.css' ):
+            self.cssFileName.setText( fname )
         
 if __name__=='__main__':
     app = QApplication([])
