@@ -22,10 +22,13 @@ class RotationSliderAnimation( QWidget ):
         #
         mainLayout.addWidget( self.movieButton, 3, 0, 1, 1 )
         mainLayout.addWidget( self.movieName, 3, 1, 1, 5 )
+        #
+        mainLayout.addWidget( self.cssButton, 4, 0, 1, 1 )
+        mainLayout.addWidget( self.cssFileName, 4, 1, 1, 5 )
     
     def __init__( self ):
         super(RotationSliderAnimation, self).__init__( )
-        self.setFixedSize( 500, 250 )
+        self.setFixedWidth( 500 )
         self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint | Qt.Window )
         self.setSizePolicy(  QSizePolicy.Fixed, QSizePolicy.Fixed )
         self.setWindowTitle( 'ROTATION VIDEO ANIMATION')
@@ -66,6 +69,11 @@ class RotationSliderAnimation( QWidget ):
         self.movieButton = QPushButton( "MOVIE NAME" )
         self.movieButton.setStyleSheet( cwr.getStyleSheet( "qpushbutton" ) )
         self.movieName.setStyleSheet( cwr.getStyleSheet( "qlabel" ) )
+        #
+        self.cssFileName = QLabel("")
+        self.cssButton = QPushButton( "EXAMPLE CSS FILE" )
+        self.cssButton.setStyleSheet( cwr.getStyleSheet( "qpushbutton" ) )
+        self.cssFileName.setStyleSheet( cwr.getStyleSheet( "qlabel" ) )
         #
         ## now make the layout
         self._initLayout( )
