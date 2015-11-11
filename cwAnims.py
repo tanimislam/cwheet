@@ -4,6 +4,18 @@ from cwAll import ColorWheelAll
 from cwResources import ColorWheelResource
 import math, numpy, shutil, sys, os
 
+class CustomLabel( QLabel ):
+    def __init__(self, parent ):
+        super(CustomLabel, self).__init__( "", parent )
+        self.actValue = ""
+
+    def setText( self, newText ):
+        super(CustomLabel, self).setText( os.path.basename( newText ) )
+        self.actValue = newText
+
+    def text( self ):
+        return self.actValue        
+        
 class RotationSliderAnimation( QWidget ):
     def _initLayout( self ):
         mainLayout = QGridLayout( )
@@ -65,12 +77,12 @@ class RotationSliderAnimation( QWidget ):
         self.endTimeDialog.setFixedWidth( 85 )
         #
         cwr = ColorWheelResource( )
-        self.movieName = QLabel("")
+        self.movieName = CustomLabel( self )
         self.movieButton = QPushButton( "MOVIE NAME" )
         self.movieButton.setStyleSheet( cwr.getStyleSheet( "qpushbutton" ) )
         self.movieName.setStyleSheet( cwr.getStyleSheet( "qlabel" ) )
         #
-        self.cssFileName = QLabel("")
+        self.cssFileName = CustomLabel( self )
         self.cssButton = QPushButton( "EXAMPLE CSS FILE" )
         self.cssButton.setStyleSheet( cwr.getStyleSheet( "qpushbutton" ) )
         self.cssFileName.setStyleSheet( cwr.getStyleSheet( "qlabel" ) )
@@ -92,6 +104,11 @@ class RotationSliderAnimation( QWidget ):
         quitAction.setShortcut( 'Ctrl+Q' )
         quitAction.triggered.connect( qApp.quit )
         self.addAction( quitAction )
+        #
+        quit2Action = QAction( self )
+        quit2Action.setShortcut( 'Esc' )
+        quit2Action.triggered.connect( qApp.quit )
+        self.addAction( quit2Action )
 
     def rotationSpeed( self ):
         self.rotationSpeedDialog.setText( "%0.3f" %
@@ -143,9 +160,11 @@ class RotationSliderAnimation( QWidget ):
         print 'HELLO WORLD'
 
     def setCSSFile( self ):
+        dirNameDefault = os.path.join( os.path.dirname( os.path.expanduser(__file__) ),
+                                       'resources', 'examples' )
         while( True ):
             fname = str( QFileDialog.getOpenFileName( self, 'Open CSS File',
-                                                      os.path.expanduser( __file__ ),
+                                                      dirNameDefault,
                                                       filter = "*.css" ) )
             if fname.lower().endswith('.css') or len( os.path.basename( fname ) ) == 0:
                 break
