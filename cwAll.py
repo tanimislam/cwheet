@@ -93,7 +93,7 @@ class ColorWheelAll( QMainWindow ):
             if fname.lower().endswith('.png') or len( os.path.basename( fname ) ) == 0:
                 break
         if fname.lower().endswith( '.png' ):
-            p = QPixmap.grabWindow( self.winId( ) )
+            p = QPixmap.grabWidget( self )
             p.save( fname )
         
     def getTransformedHsvs( self ):
