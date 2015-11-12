@@ -55,7 +55,7 @@ class CustomRunnable( QThread ):
         if len( indices_upagain ) != 0:
             # wait at bottom
             for idx in xrange( int( 30 * 0.01 * self.parent.endTimeSlider.value( ) ) ):
-                self.partDone.emit( currentIndex, idx )
+                self.partDone.emit( currentIdx, idx )
                 currentIdx += 1
 
             # go up
