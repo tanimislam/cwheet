@@ -55,7 +55,7 @@ class ColorWheelAll( QMainWindow ):
         return scrollArea
         
         
-    def __init__(self, mainWidth = 30, mainDiameter = 256 ):
+    def __init__(self, mainWidth = 30, mainDiameter = 325 ):
         super(ColorWheelAll, self).__init__()
         self.setWindowTitle( 'CWHEET v0.1 (Beta)' )
         cwr = ColorWheelResource( )

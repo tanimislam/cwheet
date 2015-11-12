@@ -1,7 +1,7 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from cwAll import ColorWheelAll
-from cwResources import ColorWheelResource
+from cwResources import ColorWheelResource, find_avconv_handbrake
 import math, numpy, shutil, sys, os, cssutils, subprocess
 from progressbar import Percentage, Bar, RotatingMarker, ProgressBar, ETA
 from enum import Enum
@@ -23,11 +23,11 @@ class CustomRunnable( QThread ):
         super(CustomRunnable, self).__init__( )
         self.parent = parent
 
-
     def run( self ):
         #
         ## now do the animation
-        indices_up, indices_down, indices_upagain, upValue, downValue = self.parent.get_indices( self.parent.cwa.hsvs )
+        indices_up, indices_down, indices_upagain, upValue, downValue = self.parent.get_indices(
+            self.parent.cwa.hsvs )
         
         #
         ## start point wait
@@ -62,7 +62,6 @@ class CustomRunnable( QThread ):
             for idx in indices_upagain:
                 self.partDone.emit( currentIdx, idx )
                 currentIdx += 1
-            
 
 class CustomLabel( QLabel ):
     def __init__(self, parent ):
@@ -75,6 +74,10 @@ class CustomLabel( QLabel ):
 
     def text( self ):
         return self.actValue
+
+    def clearText( self ):
+        super(CustomLabel, self).setText( "" )
+        self.actValue = ""
 
 class CustomErrorMessage( QErrorMessage ):
     def __init__(self, parent ):
@@ -142,6 +145,9 @@ class OperationSliderAnimation( QWidget ):
         mainLayout.addWidget( self.cssFileName, 4, 1, 1, 5 )
         #
         mainLayout.addWidget( self.bigRedGoButton, 5, 0, 1, 6 )
+        #
+        mainLayout.addWidget( self.pbar, 6, 0, 1, 5 )
+        mainLayout.addWidget( QLabel("PBAR" ), 6, 5, 1, 1 )
     
     def __init__( self, transform = OperationAnimation.HUETRANSFORM ):
         super(OperationSliderAnimation, self).__init__( )
@@ -150,6 +156,14 @@ class OperationSliderAnimation( QWidget ):
         self.setSizePolicy(  QSizePolicy.Fixed, QSizePolicy.Fixed )
         self.transform = transform
         self.setWindowTitle( _nameTable[ transform ] )
+        self.cwa = ColorWheelAll( )
+        #
+        ##
+        avconv_handbrake_dict = find_avconv_handbrake( )
+        if avconv_handbrake_dict is None:
+            initQEM = QErrorMessage( )
+            initQEM.showMessage( "ERROR, cannot find either ffmpeg/avconv or handbrakeCLI. Exiting...")
+            qApp.quit( )
         #
         ## now some of the data members
         self.rotationSpeedSlider = QSlider( Qt.Horizontal )
@@ -198,15 +212,9 @@ class OperationSliderAnimation( QWidget ):
         #
         self.qem = CustomErrorMessage( self )
         self.pbar = QProgressBar( )
-        self.pbar.setMinimum( 1 )
+        self.pbar.setMinimum( 0 )
         self.pbar.setMaximum( 100 )
-        self.pWidget = QWidget( )
-        self.pWidget.setFixedWidth( 500 )
-        self.pWidget.setWindowFlags( Qt.Window )
-        self.pWidget.hide( )
-        pLayout = QHBoxLayout( )
-        self.pWidget.setLayout( pLayout )
-        pLayout.addWidget( self.pbar )
+        self.pbar.setValue( 0 )
         #
         ## now make the layout
         self._initLayout( )
@@ -277,10 +285,6 @@ class OperationSliderAnimation( QWidget ):
         self.endTime( )
 
     def setMovieName( self ):
-        #dialog = QFileDialog( this )
-        #dialog.setFileMode( QFileDialog.Directory )
-        #dialog.setOption( QFileDialog.ShowDirsOnly )
-        #dialog.setAcceptMode( QFileDialog.AcceptSave )
         while( True ):            
             dirname = str( QFileDialog.getSaveFileName( self, 'Save Movie File',
                                                         os.path.expanduser( '~' ),
@@ -368,26 +372,40 @@ class OperationSliderAnimation( QWidget ):
         p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
         self.pbar.setValue( 1.0 * ( currentIdx + 1 ) / self.maxIndex )
 
-    def _createMovieAndQuit( self ):
+    def _createMovieAndStop( self ):
         movieDir = self.movieName.actValue.strip( )
+        avconv_handbrake_dict = find_avconv_handbrake( )
         aviFile =  os.path.join( os.path.dirname( movieDir ), '%s.avi' %
                                  os.path.basename( movieDir ) )
         mp4File = os.path.join( os.path.dirname( movieDir ), '%s.mp4' %
                                 os.path.basename( movieDir ) )
-        exec_cmd = [ '/usr/bin/ffmpeg', '-f', 'image2', '-i', os.path.join( movieDir, 'movie.%04d.png' ),
+        exec_cmd = [ avconv_handbrake_dict[ 'avconv' ], '-y', '-f', 'image2', '-i',
+                     os.path.join( movieDir, 'movie.%04d.png' ),
                      '-vcodec', 'huffyuv', aviFile ]
         proc = subprocess.Popen( exec_cmd, stdout = subprocess.PIPE, stderr = subprocess.STDOUT )
         stdout_val, stderr_val = proc.communicate( )
         shutil.rmtree( movieDir )
         
-        exec_cmd = [ os.path.expanduser('~/apps/bin/HandBrakeCLI'), '-i', aviFile,
+        exec_cmd = [ avconv_handbrake_dict[ 'handbrake' ], '-i', aviFile,
                      '-o', mp4File, '-e', 'x264' ]
         proc = subprocess.Popen( exec_cmd, stdout = subprocess.PIPE, stderr = subprocess.STDOUT )
         stdout_val, stderr_val = proc.communicate( )
         os.remove( aviFile )
-
-        qApp.quit( )
-
+        #
+        self.rotationSpeedDialog.setEnabled( True )
+        self.rotationSpeedSlider.setEnabled( True )
+        self.startTimeSlider.setEnabled( True )
+        self.startTimeDialog.setEnabled( True )
+        self.endTimeSlider.setEnabled( True )
+        self.endTimeDialog.setEnabled( True )
+        self.movieButton.setEnabled( True )
+        self.cssButton.setEnabled( True )
+        self.bigRedGoButton.setEnabled( True )
+        #
+        ## now get rid of the texts
+        self.movieName.clearText( )
+        self.cssFileName.clearText( )
+        self.pbar.setValue( 0 )
     def bigRedGoRunnable( self ):
         self.rotationSpeed( )
         self.startTime( )
@@ -398,16 +416,25 @@ class OperationSliderAnimation( QWidget ):
             self.qem.showMessage( "Error, no movie directory chosen." )
         #
         ##
-        self.hide( )
-        self.cwa = ColorWheelAll( )
+        self.rotationSpeedDialog.setEnabled( False )
+        self.rotationSpeedSlider.setEnabled( False )
+        self.startTimeSlider.setEnabled( False )
+        self.startTimeDialog.setEnabled( False )
+        self.endTimeSlider.setEnabled( False )
+        self.endTimeDialog.setEnabled( False )
+        self.movieButton.setEnabled( False )
+        self.cssButton.setEnabled( False )
+        self.bigRedGoButton.setEnabled( False )
+        #
+        ##
         movieDir = self.movieName.actValue.strip( )
         if not os.path.exists( movieDir ):
             os.mkdir( movieDir )
         cssFileName = self.cssFileName.actValue.strip( )
         css = cssutils.parseFile( cssFileName )
         self.cwa.pushNewColorsFromCSS( css )       
-        self.pWidget.show( )
-        indices_up, indices_down, indices_upagain, upValue, downValue = self.get_indices( self.cwa.hsvs )
+        indices_up, indices_down, indices_upagain, upValue, downValue = self.get_indices(
+            self.cwa.hsvs )
         def maxIndex( ):
             currIdx = 0
             for idx in xrange( int( 30 * 0.01 * self.startTimeSlider.value( ) ) ):
@@ -431,9 +458,9 @@ class OperationSliderAnimation( QWidget ):
         ##
         self.runGoRun = CustomRunnable( self )
         self.runGoRun.partDone.connect( self._updateColorWheel )
-        self.runGoRun.finished.connect( self._createMovieAndQuit )
+        self.runGoRun.finished.connect( self._createMovieAndStop )
         self.runGoRun.start( )
-            
+        
     def bigRedGo( self ):
         self.rotationSpeed( )
         self.startTime( )
@@ -444,7 +471,6 @@ class OperationSliderAnimation( QWidget ):
             self.qem.showMessage( "Error, no movie directory chosen." )
 
         self.setEnabled( False )
-        cwa = ColorWheelAll( )
         #
         ## now do the animation        
         movieDir = self.movieName.actValue.strip( )
@@ -452,7 +478,7 @@ class OperationSliderAnimation( QWidget ):
         if not os.path.exists( movieDir ):
             os.mkdir( movieDir )
         css = cssutils.parseFile( cssFileName )
-        cwa.pushNewColorsFromCSS( css )
+        self.cwa.pushNewColorsFromCSS( css )
 
         #
         ## calculate slowness array coming and going

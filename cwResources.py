@@ -1,6 +1,19 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import os, sys, glob, cssutils
+from distutils.spawn import find_executable
+
+def find_avconv_handbrake( ):
+    avconv_exec = None
+    for exc in ( 'avconv', 'ffmpeg' ):
+        avconv_exec = find_executable( exc )
+        if avconv_exec is not None: break
+    if avconv_exec is None: return None
+
+    handbrake_exec = find_executable( 'HandBrakeCLI' )
+    if handbrake_exec is None: return None
+    return { 'avconv' : avconv_exec,
+             'handbrake' : handbrake_exec }
 
 def isValidColorName( mystr ):
     return mystr.lower() in QColor.colorNames( )
