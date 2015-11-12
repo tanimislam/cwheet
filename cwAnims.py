@@ -19,6 +19,9 @@ class CustomRunnable( QRunnable ):
     def __init__(self, parent ):
         super(CustomRunnable, self).__init__( )
         self.parent = parent
+        self.procDone = pyqtSignal( bool )
+        self.partDone = pyqtSignal( int )
+        self.
 
     def run( self ):
         cwa = ColorWheelAll( )
