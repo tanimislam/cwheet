@@ -198,10 +198,15 @@ class OperationSliderAnimation( QWidget ):
         #
         self.qem = CustomErrorMessage( self )
         self.pbar = QProgressBar( )
-        self.pbar.hide( )
-        self.pbar.setFixedSize( 450, 100 )
-        self.pbar.setMinimum( 0 )
-        self.pbar.setMaximum( 99 )
+        self.pbar.setMinimum( 1 )
+        self.pbar.setMaximum( 100 )
+        self.pWidget = QWidget( )
+        self.pWidget.setFixedWidth( 500 )
+        self.pWidget.setWindowFlags( Qt.Window )
+        self.pWidget.hide( )
+        pLayout = QHBoxLayout( )
+        self.pWidget.setLayout( pLayout )
+        pLayout.addWidget( self.pbar )
         #
         ## now make the layout
         self._initLayout( )
@@ -361,8 +366,7 @@ class OperationSliderAnimation( QWidget ):
         self.setSliderValue( self.cwa, currentVal )
         p = QPixmap.grabWidget( self.cwa )
         p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
-        self.pbar.setValue( int( 1.0 * ( currentIdx + 1 ) / self.maxIndex ) )
-        self.pbar.update( )
+        self.pbar.setValue( 1.0 * ( currentIdx + 1 ) / self.maxIndex )
 
     def _createMovieAndQuit( self ):
         movieDir = self.movieName.actValue.strip( )
@@ -401,9 +405,8 @@ class OperationSliderAnimation( QWidget ):
             os.mkdir( movieDir )
         cssFileName = self.cssFileName.actValue.strip( )
         css = cssutils.parseFile( cssFileName )
-        self.cwa.pushNewColorsFromCSS( css )
-        self.pbar.setEnabled( True )
-        self.pbar.show( )
+        self.cwa.pushNewColorsFromCSS( css )       
+        self.pWidget.show( )
         indices_up, indices_down, indices_upagain, upValue, downValue = self.get_indices( self.cwa.hsvs )
         def maxIndex( ):
             currIdx = 0
@@ -440,13 +443,6 @@ class OperationSliderAnimation( QWidget ):
         if len( self.movieName.actValue.strip( ) ) == 0:
             self.qem.showMessage( "Error, no movie directory chosen." )
 
-        #runGoRun = CustomRunnable( self )
-        #self.setEnabled( False )
-        #self.pbar.setVisible( True )
-        #self.pbar.setEnabled( True )
-        #qtp = QThreadPool( )
-        #qtp.setMaxThreadCount( 1 )
-        #qtp.start( runGoRun )
         self.setEnabled( False )
         cwa = ColorWheelAll( )
         #
