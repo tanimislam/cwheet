@@ -5,6 +5,7 @@ from cwResources import ColorWheelResource
 import math, numpy, shutil, sys, os, cssutils, subprocess
 from progressbar import Percentage, Bar, RotatingMarker, ProgressBar, ETA
 from enum import Enum
+from optparse import OptionParser
 
 class OperationAnimation(Enum):
     HUETRANSFORM = 1
@@ -15,80 +16,53 @@ _nameTable = { OperationAnimation.HUETRANSFORM : 'HUE VIDEO ANIMATION',
                OperationAnimation.SATURATIONTRANSFORM : 'SATURATION VIDEO ANIMATION',
                OperationAnimation.VALUETRANSFORM : 'VALUE VIDEO ANIMATION' }
 
-class CustomRunnable( QRunnable ):
+class CustomRunnable( QThread ):
+    partDone = pyqtSignal( int, int )
+    
     def __init__(self, parent ):
         super(CustomRunnable, self).__init__( )
         self.parent = parent
-        self.procDone = pyqtSignal( bool )
-        self.partDone = pyqtSignal( int )
-        self.
+
 
     def run( self ):
-        cwa = ColorWheelAll( )
         #
         ## now do the animation
-        currentIdx = 0
-        movieDir = self.parent.movieName.actValue.strip( )
-        cssFileName = self.parent.cssFileName.actValue.strip( )
-        if not os.path.exists( movieDir ):
-            os.mkdir( movieDir )
-        css = cssutils.parseFile( cssFileName )
-        cwa.pushNewColorsFromCSS( css )
-
-        def maxIndex( ):
-            currIdx = 0
-            for idx in xrange( int( 30 * 0.01 * self.parent.startTimeSlider.value( ) ) ):
-                currIdx += 1
-            for idx in xrange( 1, 360 ):
-                currIdx += 1
-            for idx in xrange( int( 30 * 0.01 * self.parent.endTimeSlider.value( ) ) ):
-                currIdx += 1
-            for idx in xrange( 359, -1, -1 ):
-                currIdx += 1
-            return currIdx
-
-        maxIdx = maxIndex( )        
+        indices_up, indices_down, indices_upagain, upValue, downValue = self.parent.get_indices( self.parent.cwa.hsvs )
         
         #
         ## start point wait
+        currentIdx = 0
         for idx in xrange( int( 30 * 0.01 * self.parent.startTimeSlider.value( ) ) ):
-            cwa.cws.rotationSlider.setValue( 0 )
-            cwa.update( )
-            #p = QPixmap.grabWidget( cwa )
-            #p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
+            self.partDone.emit( currentIdx, 0 )
             currentIdx += 1
-            self.parent.pbar.setValue( int( currentIdx * 1.0 / maxIdx ) )
-            self.parent.pbar.update( )
 
-        # rotate up
-        for idx in xrange( 1, 360 ):
-            cwa.cws.rotationSlider.setValue( idx )
-            cwa.update( )
-            #p = QPixmap.grabWidget( cwa )
-            #p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
+        # go up from zero
+        for idx in indices_up:
+            self.partDone.emit( currentIdx, idx )
             currentIdx += 1
-            self.parent.pbar.setValue( int( currentIdx * 1.0 / maxIdx ) )
-            self.parent.pbar.update( )
 
-        # wait at end
+        # wait at top
         for idx in xrange( int( 30 * 0.01 * self.parent.endTimeSlider.value( ) ) ):
-            cwa.cws.rotationSlider.setValue( 360 )
-            cwa.update( )
-            #p = QPixmap.grabWidget( cwa )
-            #p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
+            self.partDone.emit( currentIdx, upValue )
             currentIdx += 1
-            self.parent.pbar.setValue( int( currentIdx * 1.0 / maxIdx ) )
-            self.parent.pbar.update( )
 
-        # rotate down
-        for idx in xrange( 359, -1, -1 ):
-            cwa.cws.rotationSlider.setValue( idx )
-            cwa.update( )
-            #p = QPixmap.grabWidget( cwa )
-            #p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
+        # go down
+        for idx in indices_down:
+            self.partDone.emit( currentIdx, idx )
             currentIdx += 1
-            self.parent.pbar.setValue( int( currentIdx * 1.0 / maxIdx ) )
-            self.parent.pbar.update( )
+
+        # go up again
+        if len( indices_upagain ) != 0:
+            # wait at bottom
+            for idx in xrange( int( 30 * 0.01 * self.parent.endTimeSlider.value( ) ) ):
+                self.partDone.emit( currentIndex, idx )
+                currentIdx += 1
+
+            # go up
+            for idx in indices_upagain:
+                self.partDone.emit( currentIdx, idx )
+                currentIdx += 1
+            
 
 class CustomLabel( QLabel ):
     def __init__(self, parent ):
@@ -223,12 +197,11 @@ class OperationSliderAnimation( QWidget ):
         self.setStyleSheet( cwr.getStyleSheet( "qpushbutton" ) )
         #
         self.qem = CustomErrorMessage( self )
-        self.pbar = QProgressBar( self )
-        self.pbar.setVisible( False )
-        self.pbar.setFixedSize( 450, 50 )
+        self.pbar = QProgressBar( )
+        self.pbar.hide( )
+        self.pbar.setFixedSize( 450, 100 )
         self.pbar.setMinimum( 0 )
         self.pbar.setMaximum( 99 )
-        self.pbar.setWindowFlags( Qt.CustomizeWindowHint | Qt.Window )
         #
         ## now make the layout
         self._initLayout( )
@@ -242,7 +215,7 @@ class OperationSliderAnimation( QWidget ):
         self.rotationSpeedSlider.valueChanged.connect( self.rotationSpeed )
         self.startTimeSlider.valueChanged.connect( self.startTime )
         self.endTimeSlider.valueChanged.connect( self.endTime )
-        self.bigRedGoButton.clicked.connect( self.bigRedGo )
+        self.bigRedGoButton.clicked.connect( self.bigRedGoRunnable )
         #
         quitAction = QAction( self )
         quitAction.setShortcuts(['Ctrl+Q', 'Esc'])
@@ -382,6 +355,81 @@ class OperationSliderAnimation( QWidget ):
         else:
             cwa.cws.valueSlider.setValue( idx )
         cwa.update( )
+
+    def _updateColorWheel( self, currentIdx, currentVal ):
+        movieDir = self.movieName.actValue.strip( )
+        self.setSliderValue( self.cwa, currentVal )
+        p = QPixmap.grabWidget( self.cwa )
+        p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
+        self.pbar.setValue( int( 1.0 * ( currentIdx + 1 ) / self.maxIndex ) )
+        self.pbar.update( )
+
+    def _createMovieAndQuit( self ):
+        movieDir = self.movieName.actValue.strip( )
+        aviFile =  os.path.join( os.path.dirname( movieDir ), '%s.avi' %
+                                 os.path.basename( movieDir ) )
+        mp4File = os.path.join( os.path.dirname( movieDir ), '%s.mp4' %
+                                os.path.basename( movieDir ) )
+        exec_cmd = [ '/usr/bin/ffmpeg', '-f', 'image2', '-i', os.path.join( movieDir, 'movie.%04d.png' ),
+                     '-vcodec', 'huffyuv', aviFile ]
+        proc = subprocess.Popen( exec_cmd, stdout = subprocess.PIPE, stderr = subprocess.STDOUT )
+        stdout_val, stderr_val = proc.communicate( )
+        shutil.rmtree( movieDir )
+        
+        exec_cmd = [ os.path.expanduser('~/apps/bin/HandBrakeCLI'), '-i', aviFile,
+                     '-o', mp4File, '-e', 'x264' ]
+        proc = subprocess.Popen( exec_cmd, stdout = subprocess.PIPE, stderr = subprocess.STDOUT )
+        stdout_val, stderr_val = proc.communicate( )
+        os.remove( aviFile )
+
+        qApp.quit( )
+
+    def bigRedGoRunnable( self ):
+        self.rotationSpeed( )
+        self.startTime( )
+        self.endTime( )
+        if len( self.cssFileName.actValue.strip( ) ) == 0:
+            self.qem.showMessage( "Error, no CSS file chosen." )
+        if len( self.movieName.actValue.strip( ) ) == 0:
+            self.qem.showMessage( "Error, no movie directory chosen." )
+        #
+        ##
+        self.hide( )
+        self.cwa = ColorWheelAll( )
+        movieDir = self.movieName.actValue.strip( )
+        if not os.path.exists( movieDir ):
+            os.mkdir( movieDir )
+        cssFileName = self.cssFileName.actValue.strip( )
+        css = cssutils.parseFile( cssFileName )
+        self.cwa.pushNewColorsFromCSS( css )
+        self.pbar.setEnabled( True )
+        self.pbar.show( )
+        indices_up, indices_down, indices_upagain, upValue, downValue = self.get_indices( self.cwa.hsvs )
+        def maxIndex( ):
+            currIdx = 0
+            for idx in xrange( int( 30 * 0.01 * self.startTimeSlider.value( ) ) ):
+                currIdx += 1
+            for idx in indices_up:
+                currIdx += 1
+            for idx in xrange( int( 30 * 0.01 * self.endTimeSlider.value( ) ) ):
+                currIdx += 1
+            for idx in indices_down:
+                currIdx += 1
+            if len( indices_upagain ) != 0:                
+                for idx in xrange( int( 30 * 0.01 * self.endTimeSlider.value( ) ) ):
+                    currIdx += 1
+                for idx in indices_upagain:
+                    currIdx += 1
+            for idx in xrange( int( 30 * 0.01 * self.startTimeSlider.value( ) ) ):
+                currIdx += 1
+            return currIdx
+        self.maxIndex = maxIndex( )
+        #
+        ##
+        self.runGoRun = CustomRunnable( self )
+        self.runGoRun.partDone.connect( self._updateColorWheel )
+        self.runGoRun.finished.connect( self._createMovieAndQuit )
+        self.runGoRun.start( )
             
     def bigRedGo( self ):
         self.rotationSpeed( )
@@ -521,10 +569,26 @@ class OperationSliderAnimation( QWidget ):
         os.remove( aviFile )
         
         # now quit
-        qApp.quit( )        
+        qApp.quit( )    
         
 if __name__=='__main__':
+    parser = OptionParser()
+    parser.add_option('--dohue', dest='do_hue', action='store_true', default = False,
+                      help = 'If chosen, do a HUE transform movie' )
+    parser.add_option('--dosat', dest='do_sat', action='store_true', default = False,
+                      help = 'If chosen, do a SATURATION transform movie' )
+    parser.add_option('--doval', dest='do_val', action='store_true', default = False,
+                      help = 'If chosen, do a VALUE transform movie' )
+    opts, args = parser.parse_args()
+    assert(len(filter( lambda tok: tok is True, ( opts.do_hue, opts.do_sat, opts.do_val ) ) ) == 1 )    
     app = QApplication([])
-    aosa = AllOperationSliderAnimation( )
-    aosa.show( )
+    #aosa = AllOperationSliderAnimation( )
+    #aosa.show( )
+    if opts.do_hue:
+        osa = OperationSliderAnimation( OperationAnimation.HUETRANSFORM )
+    elif opts.do_sat:
+        osa = OperationSliderAnimation( OperationAnimation.SATURATIONTRANSFORM )
+    else:
+        osa = OperationSliderAnimation( OperationAnimation.VALUETRANSFORM )
+    osa.show( )
     sys.exit( app.exec_( ) )
