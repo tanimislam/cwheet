@@ -2,7 +2,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from cwAll import ColorWheelAll
 from cwResources import ColorWheelResource, find_avconv_handbrake
-import math, numpy, shutil, sys, os, cssutils, subprocess
+import math, numpy, shutil, sys, os, cssutils, subprocess, logging
 from progressbar import Percentage, Bar, RotatingMarker, ProgressBar, ETA
 from enum import Enum
 from optparse import OptionParser
@@ -97,19 +97,19 @@ class CustomRunnable( QThread ):
         if len( indices_upagain ) != 0:
             
             # wait at bottom
-            lastIdx = -1
             for idx in xrange( int( 30 * 0.01 * self.parent.endTimeSlider.value( ) ) ):
                 self.partDone.emit( currentIdx, idx, ColorWheelOperations.DONOTHING )
                 currentIdx += 1
-                lastIdx = idx
-
-            if lastIdx != -1:
-                self.partDone.emit( currentIdx - 1, lastIdx, ColorWheelOperations.EXPANDCOLORWHEEL )
 
             # go up
             for idx in indices_upagain:
-                self.partDone.emit( currentIdx, idx, ColorWheelOperations.DONOTHING )
+                self.partDone.emit( currentIdx, idx, ColorWheelOperations.EXPANDCOLORWHEEL )
                 currentIdx += 1
+
+        # now wait
+        for idx in xrange( int( 30 * 0.01 * self.parent.startTimeSlider.value( ) ) ):
+            self.partDone.emit( currentIdx, idx, ColorWheelOperations.DONOTHING )
+            currentIdx += 1
 
 class CustomLabel( QLabel ):
     def __init__(self, parent ):
@@ -425,7 +425,16 @@ class OperationSliderAnimation( QWidget ):
             elif op == ColorWheelOperations.EXPANDCOLORWHEEL:
                 maxSat = max([ s for (h, s, v) in
                                self.cwa.getTransformedHsvs( ) ] )
-                if maxSat >= 4.75 * self.cwa.cww.dmax:
+                logging.debug('idx = %d, val = %d, maxSat = %0.3f, dmax = %0.3f' %
+                              ( currentIdx, currentVal, maxSat, self.cwa.cww.dmax ) )
+                if logging.getLogger().isEnabledFor( logging.DEBUG ):
+                    logdir = os.path.join( os.path.expanduser('~/temp'),
+                                           'debugdir' )
+                    p2 = QPixmap.grabWidget( self.cwa )
+                    p2.save( os.path.join( logdir,
+                                           'movie_expand.%04d.png' % currentIdx ) )
+                
+                if maxSat >= self.cwa.cww.dmax / 1.1:
                     self.cwa.cww.rescaleWheel( min( 1.0, 5 * maxSat ) )
                     self.cwa.update( )
         #
@@ -433,6 +442,7 @@ class OperationSliderAnimation( QWidget ):
         p = QPixmap.grabWidget( self.cwa )
         p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
         self.pbar.setValue( 1.0 * ( currentIdx + 1 ) / self.maxIndex )
+        self.cmdlinepbar.update( currentIdx + 1 )
 
     def _createMovieAndStop( self ):
         movieDir = self.movieName.actValue.strip( )
@@ -516,6 +526,15 @@ class OperationSliderAnimation( QWidget ):
                 currIdx += 1
             return currIdx
         self.maxIndex = maxIndex( )
+        widgets = [ 'Progress: ', Percentage(), ' ', Bar(marker=RotatingMarker()),
+                    ' ', ETA() ]
+        self.cmdlinepbar = ProgressBar( widgets = widgets, maxval = self.maxIndex ).start( )
+        if logging.getLogger().isEnabledFor( logging.DEBUG ):
+            logdir = os.path.join( os.path.expanduser('~/temp'), 'debugdir' )
+            if os.path.isdir( logdir ):
+                shutil.rmtree( logdir )
+            os.mkdir( logdir )
+                                               
         #
         ##
         self.runGoRun = CustomRunnable( self )
@@ -531,11 +550,17 @@ if __name__=='__main__':
                       help = 'If chosen, do a SATURATION transform movie' )
     parser.add_option('--doval', dest='do_val', action='store_true', default = False,
                       help = 'If chosen, do a VALUE transform movie' )
+    parser.add_option('--debug', dest='do_debug_logging', action='store_true', default = False,
+                      help = 'If chosen, do debug logging.')
     opts, args = parser.parse_args()
-    assert(len(filter( lambda tok: tok is True, ( opts.do_hue, opts.do_sat, opts.do_val ) ) ) == 1 )    
+    if len(filter( lambda tok: tok is True, ( opts.do_hue, opts.do_sat, opts.do_val ) ) ) != 1:
+        parser.parse_args(['-h'])
+    if opts.do_debug_logging:
+        logfile =  os.path.join( os.path.expanduser('~/temp'), 'debug.log' )                                 
+        logging.basicConfig( filename = logfile, level = logging.DEBUG )
+    #
+    ##
     app = QApplication([])
-    #aosa = AllOperationSliderAnimation( )
-    #aosa.show( )
     if opts.do_hue:
         osa = OperationSliderAnimation( OperationAnimation.HUETRANSFORM )
     elif opts.do_sat:
@@ -544,5 +569,3 @@ if __name__=='__main__':
         osa = OperationSliderAnimation( OperationAnimation.VALUETRANSFORM )
     osa.show( )
     sys.exit( app.exec_( ) )
-
-    
