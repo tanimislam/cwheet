@@ -12,12 +12,17 @@ class OperationAnimation(Enum):
     SATURATIONTRANSFORM = 2
     VALUETRANSFORM = 3
 
+class ColorWheelOperations(Enum):
+    DONOTHING = 1
+    EXPANDCOLORWHEEL = 2
+    SHRINKCOLORWHEEL = 3
+
 _nameTable = { OperationAnimation.HUETRANSFORM : 'HUE VIDEO ANIMATION',
                OperationAnimation.SATURATIONTRANSFORM : 'SATURATION VIDEO ANIMATION',
                OperationAnimation.VALUETRANSFORM : 'VALUE VIDEO ANIMATION' }
 
 class CustomRunnable( QThread ):
-    partDone = pyqtSignal( int, int )
+    partDone = pyqtSignal( int, int, ColorWheelOperations )
     
     def __init__(self, parent ):
         super(CustomRunnable, self).__init__( )
@@ -33,34 +38,36 @@ class CustomRunnable( QThread ):
         ## start point wait
         currentIdx = 0
         for idx in xrange( int( 30 * 0.01 * self.parent.startTimeSlider.value( ) ) ):
-            self.partDone.emit( currentIdx, 0 )
+            self.partDone.emit( currentIdx, 0, ColorWheelOperations.DONOTHING )
             currentIdx += 1
 
         # go up from zero
         for idx in indices_up:
-            self.partDone.emit( currentIdx, idx )
+            self.partDone.emit( currentIdx, idx, ColorWheelOperations.DONOTHING )
             currentIdx += 1
 
         # wait at top
         for idx in xrange( int( 30 * 0.01 * self.parent.endTimeSlider.value( ) ) ):
-            self.partDone.emit( currentIdx, upValue )
+            self.partDone.emit( currentIdx, upValue, ColorWheelOperations.DONOTHING )
             currentIdx += 1
 
         # go down
         for idx in indices_down:
-            self.partDone.emit( currentIdx, idx )
+            self.partDone.emit( currentIdx, idx, ColorWheelOperations.SHRINKCOLORWHEEL )
             currentIdx += 1
 
         # go up again
         if len( indices_upagain ) != 0:
+            self.partDone.emit( currentIdx - 1, indices_down[-1], ColorWheelOperations.EXPANDCOLORWHEEL )
+            
             # wait at bottom
             for idx in xrange( int( 30 * 0.01 * self.parent.endTimeSlider.value( ) ) ):
-                self.partDone.emit( currentIdx, idx )
+                self.partDone.emit( currentIdx, idx, ColorWheelOperations.DONOTHING )
                 currentIdx += 1
 
             # go up
             for idx in indices_upagain:
-                self.partDone.emit( currentIdx, idx )
+                self.partDone.emit( currentIdx, idx, ColorWheelOperations.DONOTHING )
                 currentIdx += 1
 
 class CustomLabel( QLabel ):
@@ -356,7 +363,7 @@ class OperationSliderAnimation( QWidget ):
             
         return indices_up, indices_down, indices_upagain, upValue, downValue
 
-    def setSliderValue( self, cwa, idx ):
+    def setSliderValue( self, cwa, idx, op ):
         if self.transform == OperationAnimation.HUETRANSFORM:
             cwa.cws.rotationSlider.setValue( idx )
         elif self.transform == OperationAnimation.SATURATIONTRANSFORM:
@@ -365,9 +372,15 @@ class OperationSliderAnimation( QWidget ):
             cwa.cws.valueSlider.setValue( idx )
         cwa.update( )
 
-    def _updateColorWheel( self, currentIdx, currentVal ):
+    def _updateColorWheel( self, currentIdx, currentVal, op ):
         movieDir = self.movieName.actValue.strip( )
         self.setSliderValue( self.cwa, currentVal )
+        if self.transform == OperationAnimation.HUETRANSFORM:
+            # get maximum value of hues
+            maxHue = max([ h for (h, s, v) in self.cwa.getTransformedHsvs( ) ])
+            if maxHue <= 0.2 * self.cwa.cww.dmax:
+                self.cwa.cww.rescaleWheel( maxHue )
+                self.cwa.update( )
         p = QPixmap.grabWidget( self.cwa )
         p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
         self.pbar.setValue( 1.0 * ( currentIdx + 1 ) / self.maxIndex )
@@ -433,7 +446,7 @@ class OperationSliderAnimation( QWidget ):
         cssFileName = self.cssFileName.actValue.strip( )
         css = cssutils.parseFile( cssFileName )
         self.cwa.pushNewColorsFromCSS( css )       
-        indices_up, indices_down, indices_upagain, upValue, downValue = self.get_indices(
+        indices_up, indices_down, indices_upagain, upValue, downValue, cwOps = self.get_indices(
             self.cwa.hsvs )
         def maxIndex( ):
             currIdx = 0
@@ -536,7 +549,8 @@ class OperationSliderAnimation( QWidget ):
             
         # go down
         for idx in indices_down:
-            self.setSliderValue( cwa, idx )
+            self.setSliderValue( cwa, idx )            
+                
             p = QPixmap.grabWidget( cwa )
             p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
             currentIdx += 1
@@ -614,3 +628,5 @@ if __name__=='__main__':
         osa = OperationSliderAnimation( OperationAnimation.VALUETRANSFORM )
     osa.show( )
     sys.exit( app.exec_( ) )
+
+    
