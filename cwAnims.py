@@ -379,12 +379,18 @@ class OperationSliderAnimation( QWidget ):
     def _updateColorWheel( self, currentIdx, currentVal, op ):
         movieDir = self.movieName.actValue.strip( )
         self.setSliderValue( self.cwa, currentVal )
-        if self.transform == OperationAnimation.HUETRANSFORM:
-            # get maximum value of hues
-            maxHue = max([ h for (h, s, v) in self.cwa.getTransformedHsvs( ) ])
-            if maxHue <= 0.2 * self.cwa.cww.dmax:
-                self.cwa.cww.rescaleWheel( maxHue )
+        if self.transform == OperationAnimation.SATURATIONTRANSFORM:
+            if op == ColorWheelOperations.SHRINKCOLORWHEEL:
+                # get maximum value of hues
+                maxHue = max([ h for (h, s, v) in self.cwa.getTransformedHsvs( ) ])
+                if maxHue <= 0.2 * self.cwa.cww.dmax:
+                    self.cwa.cww.rescaleWheel( maxHue )
+                    self.cwa.update( )
+            elif op == ColorWheelOperations.EXPANDCOLORWHEEL:
+                self.cwa.cww.rescaleWheel( 1.0 )
                 self.cwa.update( )
+        #
+        ##
         p = QPixmap.grabWidget( self.cwa )
         p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
         self.pbar.setValue( 1.0 * ( currentIdx + 1 ) / self.maxIndex )
