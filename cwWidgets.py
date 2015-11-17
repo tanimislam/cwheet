@@ -72,8 +72,6 @@ class ColorWheelValues( QWidget ):
             painter.drawEllipse( qp, 5, 5 )
             painter.drawText( qp + QPoint( 5, 10 ), "%d" % ( idx + 1 ) )
             painter.drawLine( xStart, 20 + idx * 30, xEnd, 20 + idx * 30 )
-            
-
 
 class ColorWheelBar( QWidget ):
     def __init__(self, parent, mainWidth = 30, mainDiameter = 256 ):

@@ -17,6 +17,42 @@ class ColorWheelOperations(Enum):
     EXPANDCOLORWHEEL = 2
     SHRINKCOLORWHEEL = 3
 
+class StupidProgressBar( QWidget ):
+    def __init__(self, parent):
+        super(StupidProgressBar, self).__init__( parent )
+        self.parent = parent
+        #
+        self.value = 0.0
+        self.font = QFont( )
+        self.font.setFamily( 'Alef' )
+        self.font.setPointSize( 14 )
+        self.font.setBold( True )
+        self.pen = QPen( )
+        self.pen.setColor( QColor( 'black' ) )
+
+    def setValue(self, val):
+        assert( val >= 0)
+        assert( val <= 1.0)
+        self.value = val
+        self.update( )
+
+    def paintEvent( self, evt ):
+        size = self.size( )
+        width = size.width( )
+        height = size.height( )
+        image = QImage(size, QImage.Format_ARGB32)
+        image.fill( QColor("white").rgb() )
+        painter = QPainter( self )
+        painter.setRenderHint( QPainter.Antialiasing )
+        painter.drawImage(0, 0, image )
+        painter.fillRect( 0, 0, int( width * self.value ), height, QColor( "#DOEAFF" ) )
+        painter.setFont( self.font )
+        painter.setPen( self.pen )
+        painter.drawText( QRect( 0, 0, width, height ), Qt.AlignCenter,
+                          '%d%%' % int( 100 * self.value ) )
+                          
+        
+                    
 _nameTable = { OperationAnimation.HUETRANSFORM : 'HUE VIDEO ANIMATION',
                OperationAnimation.SATURATIONTRANSFORM : 'SATURATION VIDEO ANIMATION',
                OperationAnimation.VALUETRANSFORM : 'VALUE VIDEO ANIMATION' }
@@ -222,10 +258,8 @@ class OperationSliderAnimation( QWidget ):
         self.setStyleSheet( cwr.getStyleSheet( "qpushbutton" ) )
         #
         self.qem = CustomErrorMessage( self )
-        self.pbar = QProgressBar( )
-        self.pbar.setMinimum( 0 )
-        self.pbar.setMaximum( 100 )
-        self.pbar.setValue( 0 )
+        self.pbar = StupidProgressBar( self )
+        self.pbar.setValue( 0.0 )
         #
         ## now make the layout
         self._initLayout( )
@@ -367,7 +401,7 @@ class OperationSliderAnimation( QWidget ):
             
         return indices_up, indices_down, indices_upagain, upValue, downValue
 
-    def setSliderValue( self, cwa, idx, op ):
+    def setSliderValue( self, cwa, idx ):
         if self.transform == OperationAnimation.HUETRANSFORM:
             cwa.cws.rotationSlider.setValue( idx )
         elif self.transform == OperationAnimation.SATURATIONTRANSFORM:
@@ -381,10 +415,10 @@ class OperationSliderAnimation( QWidget ):
         self.setSliderValue( self.cwa, currentVal )
         if self.transform == OperationAnimation.SATURATIONTRANSFORM:
             if op == ColorWheelOperations.SHRINKCOLORWHEEL:
-                # get maximum value of hues
-                maxHue = max([ h for (h, s, v) in self.cwa.getTransformedHsvs( ) ])
-                if maxHue <= 0.2 * self.cwa.cww.dmax:
-                    self.cwa.cww.rescaleWheel( maxHue )
+                # get maximum value of saturations
+                maxSat = max([ s for (h, s, v) in self.cwa.getTransformedHsvs( ) ])
+                if maxSat <= 0.2 * self.cwa.cww.dmax:
+                    self.cwa.cww.rescaleWheel( maxSat )
                     self.cwa.update( )
             elif op == ColorWheelOperations.EXPANDCOLORWHEEL:
                 self.cwa.cww.rescaleWheel( 1.0 )
@@ -428,7 +462,8 @@ class OperationSliderAnimation( QWidget ):
         ## now get rid of the texts
         self.movieName.clearText( )
         self.cssFileName.clearText( )
-        self.pbar.setValue( 0 )
+        self.pbar.setValue( 0.0 )
+        
     def bigRedGoRunnable( self ):
         self.rotationSpeed( )
         self.startTime( )
@@ -456,8 +491,7 @@ class OperationSliderAnimation( QWidget ):
         cssFileName = self.cssFileName.actValue.strip( )
         css = cssutils.parseFile( cssFileName )
         self.cwa.pushNewColorsFromCSS( css )       
-        indices_up, indices_down, indices_upagain, upValue, downValue, cwOps = self.get_indices(
-            self.cwa.hsvs )
+        indices_up, indices_down, indices_upagain, upValue, downValue = self.get_indices( self.cwa.hsvs )
         def maxIndex( ):
             currIdx = 0
             for idx in xrange( int( 30 * 0.01 * self.startTimeSlider.value( ) ) ):
@@ -483,139 +517,6 @@ class OperationSliderAnimation( QWidget ):
         self.runGoRun.partDone.connect( self._updateColorWheel )
         self.runGoRun.finished.connect( self._createMovieAndStop )
         self.runGoRun.start( )
-        
-    def bigRedGo( self ):
-        self.rotationSpeed( )
-        self.startTime( )
-        self.endTime( )
-        if len( self.cssFileName.actValue.strip( ) ) == 0:
-            self.qem.showMessage( "Error, no CSS file chosen." )
-        if len( self.movieName.actValue.strip( ) ) == 0:
-            self.qem.showMessage( "Error, no movie directory chosen." )
-
-        self.setEnabled( False )
-        #
-        ## now do the animation        
-        movieDir = self.movieName.actValue.strip( )
-        cssFileName = self.cssFileName.actValue.strip( )
-        if not os.path.exists( movieDir ):
-            os.mkdir( movieDir )
-        css = cssutils.parseFile( cssFileName )
-        self.cwa.pushNewColorsFromCSS( css )
-
-        #
-        ## calculate slowness array coming and going
-        indices_up, indices_down, indices_upagain, upValue, downValue = self.get_indices( cwa.hsvs )
-        
-        def maxIndex( ):
-            currIdx = 0
-            for idx in xrange( int( 30 * 0.01 * self.startTimeSlider.value( ) ) ):
-                currIdx += 1
-            for idx in indices_up:
-                currIdx += 1
-            for idx in xrange( int( 30 * 0.01 * self.endTimeSlider.value( ) ) ):
-                currIdx += 1
-            for idx in indices_down:
-                currIdx += 1
-            if len( indices_upagain ) != 0:                
-                for idx in xrange( int( 30 * 0.01 * self.endTimeSlider.value( ) ) ):
-                    currIdx += 1
-                for idx in indices_upagain:
-                    currIdx += 1
-            for idx in xrange( int( 30 * 0.01 * self.startTimeSlider.value( ) ) ):
-                currIdx += 1
-            return currIdx
-
-        maxIdx = maxIndex( )
-        widgets = [ 'Progress: ', Percentage(), ' ', Bar(marker=RotatingMarker()),
-                    ' ', ETA() ]
-        pbar = ProgressBar( widgets = widgets, maxval = maxIdx ).start( )
-        currentIdx = 0
-        
-        #
-        ## start point wait
-        for idx in xrange( int( 30 * 0.01 * self.startTimeSlider.value( ) ) ):
-            self.setSliderValue( cwa, 0 )
-            p = QPixmap.grabWidget( cwa )
-            p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
-            currentIdx += 1
-            pbar.update( currentIdx )
-
-        # go up from zero
-        for idx in indices_up:
-            self.setSliderValue( cwa, idx )
-            p = QPixmap.grabWidget( cwa )
-            p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
-            currentIdx += 1
-            pbar.update( currentIdx )
-            
-        # wait at top
-        for idx in xrange( int( 30 * 0.01 * self.endTimeSlider.value( ) ) ):
-            self.setSliderValue( cwa, upValue )
-            p = QPixmap.grabWidget( cwa )
-            p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
-            currentIdx += 1
-            pbar.update( currentIdx )
-            
-        # go down
-        for idx in indices_down:
-            self.setSliderValue( cwa, idx )            
-                
-            p = QPixmap.grabWidget( cwa )
-            p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
-            currentIdx += 1
-            #self.parent.pbar.setValue( int( currentIdx * 1.0 / maxIdx ) )
-            #self.parent.pbar.update( )
-            pbar.update( currentIdx )
-
-        # go up again
-        if len( indices_upagain ) != 0:
-            # wait at bottom
-            for idx in xrange( int( 30 * 0.01 * self.endTimeSlider.value( ) ) ):
-                self.setSliderValue( cwa, downValue )
-                p = QPixmap.grabWidget( cwa )
-                p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
-                currentIdx += 1
-                pbar.update( currentIdx )
-
-            # go up
-            for idx in indices_upagain:
-                self.setSliderValue( cwa, idx )
-                p = QPixmap.grabWidget( cwa )
-                p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
-                currentIdx += 1
-                pbar.update( currentIdx )
-
-        # wait again at start
-        for idx in xrange( int( 30 * 0.01 * self.startTimeSlider.value( ) ) ):
-            cwa.cws.rotationSlider.setValue( 0 )
-            cwa.update( )
-            p = QPixmap.grabWidget( cwa )
-            p.save( os.path.join( movieDir, 'movie.%04d.png' % currentIdx ) )
-            currentIdx += 1
-            pbar.update( currentIdx )
-
-        pbar.finish( )        
-        #
-        ## now make the movies
-        aviFile =  os.path.join( os.path.dirname( movieDir ), '%s.avi' %
-                                 os.path.basename( movieDir ) )
-        mp4File = os.path.join( os.path.dirname( movieDir ), '%s.mp4' %
-                                os.path.basename( movieDir ) )
-        exec_cmd = [ '/usr/bin/ffmpeg', '-f', 'image2', '-i', os.path.join( movieDir, 'movie.%04d.png' ),
-                     '-vcodec', 'huffyuv', aviFile ]
-        proc = subprocess.Popen( exec_cmd, stdout = subprocess.PIPE, stderr = subprocess.STDOUT )
-        stdout_val, stderr_val = proc.communicate( )
-        shutil.rmtree( movieDir )
-        
-        exec_cmd = [ os.path.expanduser('~/apps/bin/HandBrakeCLI'), '-i', aviFile,
-                     '-o', mp4File, '-e', 'x264' ]
-        proc = subprocess.Popen( exec_cmd, stdout = subprocess.PIPE, stderr = subprocess.STDOUT )
-        stdout_val, stderr_val = proc.communicate( )
-        os.remove( aviFile )
-        
-        # now quit
-        qApp.quit( )    
         
 if __name__=='__main__':
     parser = OptionParser()
