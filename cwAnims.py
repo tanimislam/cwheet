@@ -45,7 +45,8 @@ class StupidProgressBar( QWidget ):
         painter = QPainter( self )
         painter.setRenderHint( QPainter.Antialiasing )
         painter.drawImage(0, 0, image )
-        painter.fillRect( 0, 0, int( width * self.value ), height, QColor( "#DOEAFF" ) )
+        painter.fillRect( 0, 0, int( width * self.value ), height,
+                          QColor( "#DOEAFF" ) )
         painter.setFont( self.font )
         painter.setPen( self.pen )
         painter.drawText( QRect( 0, 0, width, height ), Qt.AlignCenter,
@@ -416,13 +417,17 @@ class OperationSliderAnimation( QWidget ):
         if self.transform == OperationAnimation.SATURATIONTRANSFORM:
             if op == ColorWheelOperations.SHRINKCOLORWHEEL:
                 # get maximum value of saturations
-                maxSat = max([ s for (h, s, v) in self.cwa.getTransformedHsvs( ) ])
+                maxSat = max([ s for (h, s, v) in
+                               self.cwa.getTransformedHsvs( ) ])
                 if maxSat <= 0.2 * self.cwa.cww.dmax:
                     self.cwa.cww.rescaleWheel( maxSat )
                     self.cwa.update( )
             elif op == ColorWheelOperations.EXPANDCOLORWHEEL:
-                self.cwa.cww.rescaleWheel( 1.0 )
-                self.cwa.update( )
+                maxSat = max([ s for (h, s, v) in
+                               self.cwa.getTransformedHsvs( ) ] )
+                if maxSat >= 4.75 * self.cwa.cww.dmax:
+                    self.cwa.cww.rescaleWheel( min( 1.0, 5 * maxSat ) )
+                    self.cwa.update( )
         #
         ##
         p = QPixmap.grabWidget( self.cwa )
