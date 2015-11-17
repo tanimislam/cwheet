@@ -58,12 +58,16 @@ class CustomRunnable( QThread ):
 
         # go up again
         if len( indices_upagain ) != 0:
-            self.partDone.emit( currentIdx - 1, indices_down[-1], ColorWheelOperations.EXPANDCOLORWHEEL )
             
             # wait at bottom
+            lastIdx = -1
             for idx in xrange( int( 30 * 0.01 * self.parent.endTimeSlider.value( ) ) ):
                 self.partDone.emit( currentIdx, idx, ColorWheelOperations.DONOTHING )
                 currentIdx += 1
+                lastIdx = idx
+
+            if lastIdx != -1:
+                self.partDone.emit( currentIdx - 1, lastIdx, ColorWheelOperations.EXPANDCOLORWHEEL )
 
             # go up
             for idx in indices_upagain:
