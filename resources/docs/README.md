@@ -1,6 +1,6 @@
 ---
-author: Tanim Islam
-generator: pandoc
+author:
+- Tanim Islam
 ...
 
 INTRODUCTION
