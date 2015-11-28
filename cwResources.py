@@ -76,8 +76,9 @@ class ColorWheelResource( object ):
             mainPath = os.path.join( os.path.dirname( os.path.abspath(__file__) ), 'resources' )
             self._styleSheets = {}
             self._fontNames = set([])
-            self._colorwheel = [  QColor(name) for name in ( '#E5EDE9', '#EDE6CE', '#EDDFEB',
-                                                             '#F1EDFE', '#CCD9FD', '#F9EBFD' ) ]
+            #self._colorwheel = [  QColor(name) for name in ( '#E5EDE9', '#EDE6CE', '#EDDFEB',
+            #                                                 '#F1EDFE', '#CCD9FD', '#F9EBFD' ) ]
+            self._colorwheel = [ QColor(num, num, num) for num in xrange(240, 210, -5) ]
             self._icons = {}
             fontNames = []
             for cssFile in glob.glob( os.path.join( mainPath, 'css', '*.css' ) ):

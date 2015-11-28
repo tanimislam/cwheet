@@ -7,10 +7,9 @@ class ColorWheelSlider( QWidget ):
     def _layoutWidgets( self ):
         slidersLayout = QGridLayout()
         self.setLayout( slidersLayout )
-        # self.setStyleSheet( "background-color: #f9ebfd;" )
-        slidersLayout.addWidget( QLabel( "ROT"), 0, 0, 1, 1)
+        slidersLayout.addWidget( QLabel( "HUE"), 0, 0, 1, 1)
         slidersLayout.addWidget( self.rotationSlider, 0, 1, 1, 4 )
-        slidersLayout.addWidget( QLabel("SCALE"), 1, 0, 1, 1)
+        slidersLayout.addWidget( QLabel("SAT"), 1, 0, 1, 1)
         slidersLayout.addWidget( self.scalingSlider, 1, 1, 1, 4 )
         slidersLayout.addWidget( QLabel( "VAL"), 2, 0, 1, 1)
         slidersLayout.addWidget( self.valueSlider, 2, 1, 1, 4 )
@@ -23,6 +22,8 @@ class ColorWheelSlider( QWidget ):
     def __init__(self, parent):
         super(QWidget, self).__init__( parent )
         self.parent = parent
+        self.setStyleSheet( 'font-family: Alef;')
+        # self.setStyleSheet('background-color: white;')
         #
         self.rotationSlider = QSlider(Qt.Horizontal)
         self.rotationSlider.setTickInterval( 30 )

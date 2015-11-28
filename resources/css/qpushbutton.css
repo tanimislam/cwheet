@@ -1,9 +1,11 @@
 QPushButton {
   font-family: Alef;
   border-width: 2px;
-  border-color: blue;
+  border-color: #858585;
   border-style: solid;
-  border-radius: 7px;
+  border-radius: 2px;
+  background-color: #858585;
+  color: white;
   padding: 3px;
   font-size: 12px;
   font-weight: bold;
@@ -14,9 +16,9 @@ QPushButton {
 }
 
 QPushButton:hover:!pressed {
-  background-color: #FFDBBF;
+  background-color: #C9C9C9;
 }
 
 QPushButton:pressed {
-  background-color: red;
+  background-color: white;
 }

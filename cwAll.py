@@ -13,6 +13,7 @@ class ColorWheelAll( QMainWindow ):
         leftWidget = QWidget( )
         leftLayout = QVBoxLayout( )
         leftWidget.setLayout( leftLayout )
+        # leftWidget.setStyleSheet("background-color: #E6E6E6;")
         #
         ## color widget layout
         leftLayout.addWidget( self._layoutColorWidget( ) )
@@ -29,7 +30,7 @@ class ColorWheelAll( QMainWindow ):
         rightWidget = QWidget( )
         rightLayout = QVBoxLayout( )
         rightWidget.setLayout( rightLayout )
-        rightWidget.setStyleSheet("background-color: #EDDFEB;")
+        rightWidget.setStyleSheet("background-color: #E6E6E6;")
         rightLayout.addWidget( self.cwt )
         rightLayout.addWidget( QWidget( ) )
         rightLayout.addWidget( self._layoutColorWheelValuesScrollArea( ) )

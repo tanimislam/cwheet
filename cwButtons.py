@@ -7,8 +7,6 @@ class ColorWheelButtons( QWidget ):
     def __init__(self, parent):
         super(QWidget, self).__init__( parent )
         self.parent = parent
-        #        
-        # self.setStyleSheet("background-color: ivory;")
         buttonLayout = QGridLayout( )
         self.setLayout( buttonLayout )
         self.scaleButton = QPushButton( "SCALE" )
@@ -86,7 +84,7 @@ class ColorWheelButtons( QWidget ):
     def paintEvent(self, evt):
         qs = self.size()
         image = QImage( qs.width(), qs.height(), QImage.Format_ARGB32)
-        image.fill( QColor( "ivory" ).rgb() )
+        image.fill( QColor( "#E6E6E6" ).rgb() )
         painter = QPainter( self )
         painter.setRenderHint( QPainter.Antialiasing )
         painter.drawImage(0, 0, image )
