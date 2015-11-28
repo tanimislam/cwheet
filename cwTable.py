@@ -9,14 +9,6 @@ class ColorWheelTableModel( QAbstractTableModel ):
         self.headerData = [ 'index', 'name', 'color', 'swatch' ]
         self.parent = parent
         self._colorwheel = ColorWheelResource().getColorWheel()
-
-    def headerData( self, section, orientation, role ):
-        if role == Qt.FontRole:
-            myFont = Qfont( )
-            myFont.setFamily( 'Alef' )
-            myFont.setBold( True )
-            myFont.setPixelSize( 11 )
-            return myFont
         
     def pushData(self, newColorNames ):
         #
@@ -139,7 +131,7 @@ class ColorWheelTable(QTableView):
         self.setItemDelegateForColumn(1, NameDelegate( self ) )
         self.setItemDelegateForColumn(2, HexColorDelegate( self ) )
         self.setItemDelegateForColumn(3, ColorBarDelegate( self ) )
-
+        
         # set style
         cwr = ColorWheelResource()
         self.setStyleSheet( cwr.getStyleSheet( 'qtableview' ) )
@@ -151,8 +143,9 @@ class ColorWheelTable(QTableView):
         self.verticalHeader().setResizeMode( QHeaderView.Fixed )
         self.horizontalHeader().setResizeMode( QHeaderView.Fixed )
         qf = self.horizontalHeader().font()
+        qf.setFamily( 'Alef' )
         qf.setBold( True )
-        qf.setPointSize( 12 )
+        qf.setPointSize( 9 )
         self.horizontalHeader().setFont( qf )
         self.verticalHeader().setFont( qf )
         self.horizontalHeader().setDefaultAlignment( Qt.AlignLeft )
