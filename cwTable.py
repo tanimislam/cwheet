@@ -10,6 +10,14 @@ class ColorWheelTableModel( QAbstractTableModel ):
         self.parent = parent
         self._colorwheel = ColorWheelResource().getColorWheel()
 
+    def headerData( self, section, orientation, role ):
+        if role == Qt.FontRole:
+            myFont = Qfont( )
+            myFont.setFamily( 'Alef' )
+            myFont.setBold( True )
+            myFont.setPixelSize( 11 )
+            return myFont
+        
     def pushData(self, newColorNames ):
         #
         ## first remove all rows that exist
