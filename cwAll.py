@@ -85,6 +85,10 @@ class ColorWheelAll( QMainWindow ):
         self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint )
         self.layout().setSizeConstraint( QLayout.SetFixedSize )
         # self.setSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed )
+        screenshotAction = QAction( self )
+        screenshotAction.setShortcut( 'Shift+Ctrl+P' )
+        screenshotAction.triggered.connect( self.takeScreenshot )
+        self.addAction( screenshotAction )
 
     def takeScreenshot( self ):
         while( True ):
