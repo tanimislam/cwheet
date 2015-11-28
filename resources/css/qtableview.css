@@ -1,8 +1,8 @@
 QTableView {
-  font-family: PT Mono;
-  font-size: 11px;
+    font-family: Alef;
+    font-size: 11px;
 }
 
 QTableView:hover {
-  background-color: white;
+    background-color: white;
 }
