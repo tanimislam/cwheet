@@ -67,7 +67,6 @@ class ColorWheelTableModel( QAbstractTableModel ):
         if col == 0:
             return
         elif col == 1:
-            print 'HMM'
             self.colorNames[ row ] = str( value.toString() )
         elif col == 2:
             name = str( value.toString() )
