@@ -74,8 +74,6 @@ class ColorWheelAll( QMainWindow ):
         self.mainWidth = mainWidth
         self.mainDiameter = mainDiameter
         #
-        self.setMenuBar( self.cwmb )
-        #
         centerWidget = QWidget( )
         centerLayout = QHBoxLayout( )
         centerWidget.setLayout( centerLayout )
