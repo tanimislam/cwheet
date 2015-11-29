@@ -31,7 +31,7 @@ class ColorWheelTableModel( QAbstractTableModel ):
 
     def data(self, index, role ):
         if not index.isValid():
-            return QVariant( )
+            return QVariant("")
         row = index.row()
         col = index.column()
         if role == Qt.BackgroundRole:

@@ -62,19 +62,19 @@ class ColorWheelExpandedColorSwatch( QWidget ):
                               Qt.AlignCenter, colorname )
         
 
-class ColorWheelMenuBar( QMenuBar ):
+class ColorWheelMenuBar( QWidget ):
     def __init__(self, parent ):
-        super(ColorWheelMenuBar, self).__init__( parent )
+        super(ColorWheelMenuBar, self).__init__( )
         self.parent = parent
         #
-        fileMenu = self.addMenu( '&File' )
+        fileMenu = self.parent.menuBar().addMenu( '&File' )
         self.saveAction = fileMenu.addAction('&Save CSS' )
         openAction = fileMenu.addAction('&Open CSS' )
         openURLAction = fileMenu.addAction('&Open URL CSS')
         quitAction = fileMenu.addAction( '&Quit' )
         screenshotAction = fileMenu.addAction( '&Screenshot' )
         #
-        opsMenu = self.addMenu( '&Operations' )
+        opsMenu = self.parent.menuBar().addMenu( '&Operations' )
         showExpandedColorSwatchAction = opsMenu.addAction('&Expanded Color Swatch' )
         self._expandedColorSwatch = ColorWheelExpandedColorSwatch( parent )
         transformAction = opsMenu.addAction('&Set Transform')

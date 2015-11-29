@@ -1,6 +1,7 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import os, sys, glob, cssutils
+from functools import reduce
 from distutils.spawn import find_executable
 
 def find_avconv_handbrake( ):
@@ -24,7 +25,7 @@ def isValidColorString( mystr ):
     if not mystr.startswith('#'):
         return False
     mychars = set([ tok for tok in mystr[1:] ])
-    if len(mychars - set(['%d' % num for num in xrange(10) ] + ['A','B','C','D','E','F' ])) != 0:
+    if len(mychars - set(['%d' % num for num in range(10) ] + ['A','B','C','D','E','F' ])) != 0:
         return False
     return True
 
@@ -78,14 +79,14 @@ class ColorWheelResource( object ):
             self._fontNames = set([])
             #self._colorwheel = [  QColor(name) for name in ( '#E5EDE9', '#EDE6CE', '#EDDFEB',
             #                                                 '#F1EDFE', '#CCD9FD', '#F9EBFD' ) ]
-            self._colorwheel = [ QColor(num, num, num) for num in xrange(240, 210, -5) ]
+            self._colorwheel = [ QColor(num, num, num) for num in range(240, 210, -5) ]
             self._icons = {}
             fontNames = []
             for cssFile in glob.glob( os.path.join( mainPath, 'css', '*.css' ) ):
                 keyName = os.path.basename( cssFile ).replace('.css', '').strip()
                 qFile = QFile( cssFile )
                 qFile.open( QIODevice.ReadOnly )                
-                self._styleSheets[ keyName ] = QString( qFile.readAll( ) )
+                self._styleSheets[ keyName ] = str( qFile.readAll( ) )
                 qFile.close()
             #
             for fontFile in glob.glob( os.path.join( mainPath, 'fonts', '*.ttf' ) ):
@@ -97,7 +98,7 @@ class ColorWheelResource( object ):
                 iconName = os.path.basename( iconFile ).replace( '.png', '').strip( )
                 self._icons[ iconName ] = QIcon( iconFile )
             ffams = set(reduce(lambda x, y: x + y, [ list( QFontDatabase.applicationFontFamilies(idx) ) for
-                                                     idx in xrange(numFonts) ] ) )
+                                                     idx in range(numFonts) ] ) )
             self._fontNames = set( [ str( tok ) for tok in ffams ] )
 
         def getStyleSheets( self ):

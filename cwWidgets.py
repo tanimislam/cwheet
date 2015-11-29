@@ -38,7 +38,7 @@ class ColorWheelValues( QWidget ):
         pen.setWidth( 1 )
         for idx, tup in enumerate( allHsvs ):
             h, s = tup[:2]
-            for xpos in xrange( xStart, xEnd + 1):
+            for xpos in range( xStart, xEnd + 1):
                 v = QStyle.sliderValueFromPosition( 0, 100, xpos - xStart, xSpan ) * 0.01
                 color.setHsvF( h, s, v, 0.5 )
                 pen.setColor( color )
@@ -104,7 +104,7 @@ class ColorWheelBar( QWidget ):
         #
         h, s, v = self.parent.getTransformedHsvs()[ self.parent.currentIndex ]
         color = QColor()
-        for y in xrange( self.height ):
+        for y in range( self.height ):
             qp = QPoint( 0.5 * self.width, y)
             val = self._getValueColor( qp )
             if val < 0:
@@ -179,8 +179,8 @@ class ColorWheelWidget( QWidget ):
         # these are used for the current color selection image
         self.bMouseDown = False
         
-        for y in xrange( self.dim ):
-            for x in xrange( self.dim ):
+        for y in range( self.dim ):
+            for x in range( self.dim ):
                 qp = QPoint(x, y)
                 d = self.getDist(qp, self.center) / self.master_radius
                 if d <= 1:
