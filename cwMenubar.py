@@ -60,12 +60,52 @@ class ColorWheelExpandedColorSwatch( QWidget ):
             row, col = divmod( idx, numCols )
             painter.drawText( QRect( 10 + 170 * col, 10 + 170 * row, 150, 150 ),
                               Qt.AlignCenter, colorname )
-        
 
+class ReadmeWidget( QWidget ):
+    def __init__( self, parent ):
+        super( ReadmeWidget, self ).__init__( parent )
+        self.parent = parent
+        self.setStyleSheet('font-family: Alef;')
+        layout = QVBoxLayout( )
+        self.setLayout( layout )
+        qf = QFont( )
+        qf.setFamily( 'Alef' )
+        qf.setPointSize( 12 )
+        qfm = QFontMetrics( qf )
+        width = qfm.boundingRect( ''.join(['A'] * 45)).width()
+        self.setFixedWidth( width )
+        self.setFixedHeight( 600 )
+        myTextArea = QTextEdit( )
+        myTextArea.setReadOnly( True )
+        myTextArea.setHtml( open( 'resources/docs/README.html', 'r').read( ) )
+        layout.addWidget( myTextArea )
+        self.hide( )
+        #
+        ##
+        self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint | Qt.Window )
+        self.setSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed )
+        self.setWindowTitle( 'README' )
+        escAction = QAction( self )
+        escAction.setShortcut( 'Esc' )
+        escAction.triggered.connect( self.hideMe )
+        self.addAction( escAction )
+
+    def hideMe( self ):
+        self.hide( )
+        self.parent.parent.setEnabled( True )
+
+    def readMe( self ):
+        self.show( )
+        self.parent.parent.setEnabled( False )
+
+        
 class ColorWheelMenuBar( QWidget ):
     def __init__(self, parent ):
         super(ColorWheelMenuBar, self).__init__( )
         self.parent = parent
+        #
+        self.readmeWindow = ReadmeWidget( self )
+        # self.aboutWindow = self._createAboutWindow( )
         #
         fileMenu = self.parent.menuBar().addMenu( '&File' )
         self.saveAction = fileMenu.addAction('&Save CSS' )
@@ -82,7 +122,7 @@ class ColorWheelMenuBar( QWidget ):
         removeColorAction = opsMenu.addAction( '&Remove Color' )
         #
         helpMenu = self.parent.menuBar().addMenu( '&Help' )
-        helpAction = helpMenu.addAction( '&Help' )
+        readmeAction = helpMenu.addAction( '&Readme' )
         aboutAction = helpMenu.addAction( '&About' )
         #
         ## actions
@@ -96,6 +136,8 @@ class ColorWheelMenuBar( QWidget ):
         screenshotAction.triggered.connect( self.parent.takeScreenshot )
         quitAction.setShortcut( 'Ctrl+Q' )
         quitAction.triggered.connect( qApp.quit )
+        readmeAction.triggered.connect( self.readmeWindow.readMe )
+        #aboutAction.triggered.connect( self.aboutTool )
         #
         showExpandedColorSwatchAction.setShortcut( 'Shift+Ctrl+W' )
         showExpandedColorSwatchAction.triggered.connect( self.expandColorSwatchAction )
@@ -105,6 +147,10 @@ class ColorWheelMenuBar( QWidget ):
         transformAction.triggered.connect( self.parent.cws.setTransform )
         removeColorAction.setShortcut( 'Ctrl+Z' )
         removeColorAction.triggered.connect( self.parent.removeColor )
+
+    #def aboutTool( self ):
+    #    self.aboutWindow.show( )
+    #    self.parent.setEnabled( False )
         
     def paintEvent( self, evt ):
         self._expandedColorSwatch.update( )
