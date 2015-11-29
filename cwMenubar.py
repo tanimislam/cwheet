@@ -81,8 +81,9 @@ class ColorWheelMenuBar( QWidget ):
         snapBackAction = opsMenu.addAction('&Snap Back')
         removeColorAction = opsMenu.addAction( '&Remove Color' )
         #
-        helpAction = self.addAction( '&Help' )
-        aboutAction = self.addAction( '&About' )
+        helpMenu = self.parent.menuBar().addMenu( '&Help' )
+        helpAction = helpMenu.addAction( '&Help' )
+        aboutAction = helpMenu.addAction( '&About' )
         #
         ## actions
         self.saveAction.setShortcut('Shift+Ctrl+S')
