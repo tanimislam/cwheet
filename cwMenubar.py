@@ -98,6 +98,43 @@ class ReadmeWidget( QWidget ):
         self.show( )
         self.parent.parent.setEnabled( False )
 
+
+class AboutmeWidget( QWidget ):
+    def __init__( self, parent ):
+        super( AboutmeWidget, self ).__init__( parent )
+        self.parent = parent
+        self.setStyleSheet('font-family: Alef;')
+        layout = QVBoxLayout( )
+        self.setLayout( layout )
+        qf = QFont( )
+        qf.setFamily( 'Alef' )
+        qf.setPointSize( 12 )
+        qfm = QFontMetrics( qf )
+        width = qfm.boundingRect( ''.join(['A'] * 45)).width()
+        self.setFixedWidth( width )
+        self.setFixedHeight( 300 )
+        myTextArea = QTextEdit( )
+        myTextArea.setReadOnly( True )
+        myTextArea.setHtml( open( 'resources/docs/ABOUT.html', 'r').read( ) )
+        layout.addWidget( myTextArea )
+        self.hide( )
+        #
+        ##
+        self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint | Qt.Window )
+        self.setSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed )
+        self.setWindowTitle( 'ABOUT' )
+        escAction = QAction( self )
+        escAction.setShortcut( 'Esc' )
+        escAction.triggered.connect( self.hideMe )
+        self.addAction( escAction )
+
+    def hideMe( self ):
+        self.hide( )
+        self.parent.parent.setEnabled( True )
+
+    def aboutTool( self ):
+        self.show( )
+        self.parent.parent.setEnabled( False )
         
 class ColorWheelMenuBar( QWidget ):
     def __init__(self, parent ):
@@ -105,7 +142,7 @@ class ColorWheelMenuBar( QWidget ):
         self.parent = parent
         #
         self.readmeWindow = ReadmeWidget( self )
-        # self.aboutWindow = self._createAboutWindow( )
+        self.aboutmeWindow = AboutmeWidget( self )
         #
         fileMenu = self.parent.menuBar().addMenu( '&File' )
         self.saveAction = fileMenu.addAction('&Save CSS' )
@@ -137,7 +174,7 @@ class ColorWheelMenuBar( QWidget ):
         quitAction.setShortcut( 'Ctrl+Q' )
         quitAction.triggered.connect( qApp.quit )
         readmeAction.triggered.connect( self.readmeWindow.readMe )
-        #aboutAction.triggered.connect( self.aboutTool )
+        aboutAction.triggered.connect( self.aboutmeWindow.aboutTool )
         #
         showExpandedColorSwatchAction.setShortcut( 'Shift+Ctrl+W' )
         showExpandedColorSwatchAction.triggered.connect( self.expandColorSwatchAction )
@@ -147,10 +184,6 @@ class ColorWheelMenuBar( QWidget ):
         transformAction.triggered.connect( self.parent.cws.setTransform )
         removeColorAction.setShortcut( 'Ctrl+Z' )
         removeColorAction.triggered.connect( self.parent.removeColor )
-
-    #def aboutTool( self ):
-    #    self.aboutWindow.show( )
-    #    self.parent.setEnabled( False )
         
     def paintEvent( self, evt ):
         self._expandedColorSwatch.update( )
