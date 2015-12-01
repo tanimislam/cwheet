@@ -72,7 +72,7 @@ class ReadmeWidget( QWidget ):
         qf.setFamily( 'Alef' )
         qf.setPointSize( 12 )
         qfm = QFontMetrics( qf )
-        width = qfm.boundingRect( ''.join(['A'] * 45)).width()
+        width = qfm.boundingRect( ''.join(['A'] * 55)).width()
         self.setFixedWidth( width )
         self.setFixedHeight( 600 )
         myTextArea = QTextEdit( )
@@ -97,6 +97,9 @@ class ReadmeWidget( QWidget ):
     def readMe( self ):
         self.show( )
         self.parent.parent.setEnabled( False )
+
+    def closeEvent( self, evt ):
+        self.hideMe( )
 
 
 class AboutmeWidget( QWidget ):
@@ -135,6 +138,9 @@ class AboutmeWidget( QWidget ):
     def aboutTool( self ):
         self.show( )
         self.parent.parent.setEnabled( False )
+
+    def closeEvent( self, evt ):
+        self.hideMe( )
         
 class ColorWheelMenuBar( QWidget ):
     def __init__(self, parent ):

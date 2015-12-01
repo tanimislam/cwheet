@@ -94,6 +94,22 @@ the command:
 \begin{verbatim}
 pip --user --upgrade -r requirements.txt
 \end{verbatim}
+To create the HTML versions of the documents seen in the
+\texttt{README} and \texttt{ABOUT} dialog windows, respectively
+\texttt{README.html} and \texttt{ABOUT.html}, run the following
+commands in the \texttt{resources/docs} directory,
+\begin{verbatim}
+pandoc -s README.tex -o README.html --email-obfuscation=none
+pandoc -s ABOUT.tex -o ABOUT.html --email-obfuscation=none
+\end{verbatim}
+To create a zip archive of the \texttt{HEAD} version of this master
+branch, run the following command in the root directory of this
+repository,
+\begin{verbatim}
+git archive --format=zip --prefix=cwheet/ HEAD cwheet.zip
+\end{verbatim}
+This command creates the archive \texttt{cwheet.zip} in the root
+directory.
 
 \section{REQUIREMENTS}\label{requirements}
 \begin{itemize}

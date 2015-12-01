@@ -27,6 +27,12 @@
 <h1 id="installation">INSTALLATION</h1>
 <p>No special installation is necessary to run this file. The requirements for this python package are located in <code>requirements.txt</code>. To install the requirements as an user, run the command:</p>
 <pre><code>pip --user --upgrade -r requirements.txt</code></pre>
+<p>To create the HTML versions of the documents seen in the <code>README</code> and <code>ABOUT</code> dialog windows, respectively <code>README.html</code> and <code>ABOUT.html</code>, run the following commands in the <code>resources/docs</code> directory,</p>
+<pre><code>pandoc -s README.tex -o README.html --email-obfuscation=none
+pandoc -s ABOUT.tex -o ABOUT.html --email-obfuscation=none</code></pre>
+<p>To create a zip archive of the <code>HEAD</code> version of this master branch, run the following command in the root directory of this repository,</p>
+<pre><code>git archive --format=zip --prefix=cwheet/ HEAD cwheet.zip</code></pre>
+<p>This command creates the archive <code>cwheet.zip</code> in the root directory.</p>
 <h1 id="requirements">REQUIREMENTS</h1>
 <ul>
 <li><p><a href="http://pythonhosted.org/cssutils/"><code>cssutils</code></a>: Useful python utility to parse CSS files.</p></li>
