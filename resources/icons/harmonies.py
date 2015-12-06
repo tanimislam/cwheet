@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 import pylab, numpy
-from matplotlib.patches import Circle
-from matplotlib.lines import Line2D
+from matplotlib.patches import Circle, Arrow
 
 def draw_circle_harmony( ):
     ax = pylab.axes( )
@@ -30,10 +29,16 @@ def draw_line_harmony( ):
     #
     ##
     angle = numpy.radians( 30.0 )
-    radii = numpy.linspace(-0.5, 0.5, 4 )
-    ax.add_line(Line2D( [ -0.5 * numpy.cos(angle), 0.5 * numpy.cos(angle) ],
-                        [ -0.5 * numpy.sin(angle), 0.5 * numpy.sin(angle) ],
-                        linestyle='dashed', linewidth = 6, color = 'black' ))
+    maxrad = 0.8
+    radii = numpy.linspace( -maxrad, maxrad, 4 )
+    #
+    ## stupid hack to add a line as a patch
+    ## if I add a line as a Line2D, then always appears on top :(
+    ax.add_patch(Arrow( -maxrad * numpy.cos(angle),
+                        -maxrad * numpy.sin(angle),
+                        2 * maxrad * numpy.cos(angle),
+                        2 * maxrad * numpy.sin(angle), width = 0,
+                        linestyle = 'dashed', linewidth = 6, color = 'gray' ))
     for radius in radii:
         ax.add_patch(Circle((radius * numpy.cos(angle),
                              radius * numpy.sin(angle)),
