@@ -1,7 +1,7 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import cssutils, os, subprocess, cwResources
-import math, numpy
+import math, numpy, logging
 
 class ColorWheelExpandedColorSwatch( QWidget ):
     def __init__( self, parent ):
@@ -202,9 +202,10 @@ class ColorWheelMenuBar( QWidget ):
 
     def expandColorSwatchAction( self ):
         if len(self.parent.cwt.getColorNames( )) <= 1:
+            logging.debug('need to have multiple colors defined.')
             return
         if not self._expandedColorSwatch.isVisible( ):
-            self._expandedColorSwatch.setVisible( True )
+            self._expandedColorSwatch.show( )
             
     def openCSSURLFile( self ):
         while(True):
