@@ -22,6 +22,7 @@ class ColorWheelExpandedColorSwatch( QWidget ):
         self.setVisible( False )
 
     def paintEvent( self, evt ):
+        logging.debug("PAINTED IN ColorWheelExpandedColorSwatch")
         colorNames = self.parent.cwt.getColorNames( )
         numCols = int( numpy.sqrt( len( colorNames ) * 1.0 ) ) + 1 # candidate number of cols
         numRows, rem = divmod( len( colorNames ), numCols )
@@ -92,11 +93,12 @@ class ReadmeWidget( QWidget ):
 
     def hideMe( self ):
         self.hide( )
-        self.parent.parent.setEnabled( True )
+        self.parent.setEnabled( True )
 
     def readMe( self ):
         self.show( )
-        self.parent.parent.setEnabled( False )
+        self.parent.setEnabled( False )
+        self.setEnabled( True )
 
     def closeEvent( self, evt ):
         self.hideMe( )
@@ -133,22 +135,22 @@ class AboutmeWidget( QWidget ):
 
     def hideMe( self ):
         self.hide( )
-        self.parent.parent.setEnabled( True )
+        self.parent.setEnabled( True )
 
     def aboutTool( self ):
         self.show( )
-        self.parent.parent.setEnabled( False )
+        self.parent.setEnabled( False )
+        self.setEnabled( True )
 
     def closeEvent( self, evt ):
         self.hideMe( )
         
-class ColorWheelMenuBar( QWidget ):
+class ColorWheelMenuBar( object ):
     def __init__(self, parent ):
-        super(ColorWheelMenuBar, self).__init__( )
         self.parent = parent
         #
-        self.readmeWindow = ReadmeWidget( self )
-        self.aboutmeWindow = AboutmeWidget( self )
+        self.readmeWindow = ReadmeWidget( parent )
+        self.aboutmeWindow = AboutmeWidget( parent )
         #
         fileMenu = self.parent.menuBar().addMenu( '&File' )
         self.saveAction = fileMenu.addAction('&Save CSS' )
@@ -159,7 +161,7 @@ class ColorWheelMenuBar( QWidget ):
         #
         opsMenu = self.parent.menuBar().addMenu( '&Operations' )
         showExpandedColorSwatchAction = opsMenu.addAction('&Expanded Color Swatch' )
-        self._expandedColorSwatch = ColorWheelExpandedColorSwatch( parent )
+        self.expandedColorSwatch = ColorWheelExpandedColorSwatch( parent )
         transformAction = opsMenu.addAction('&Set Transform')
         snapBackAction = opsMenu.addAction('&Snap Back')
         removeColorAction = opsMenu.addAction( '&Remove Color' )
@@ -191,9 +193,6 @@ class ColorWheelMenuBar( QWidget ):
         removeColorAction.setShortcut( 'Ctrl+Z' )
         removeColorAction.triggered.connect( self.parent.removeColor )
         
-    def paintEvent( self, evt ):
-        self._expandedColorSwatch.update( )
-        
     def enableSaveAction( self ):
         self.saveAction.setEnabled( True )
         
@@ -204,8 +203,8 @@ class ColorWheelMenuBar( QWidget ):
         if len(self.parent.cwt.getColorNames( )) <= 1:
             logging.debug('need to have multiple colors defined.')
             return
-        if not self._expandedColorSwatch.isVisible( ):
-            self._expandedColorSwatch.show( )
+        if not self.expandedColorSwatch.isVisible( ):
+            self.expandedColorSwatch.show( )
             
     def openCSSURLFile( self ):
         while(True):

@@ -152,6 +152,9 @@ class ColorWheelAll( QMainWindow ):
         self.cwt.pushData( colorLabels )
         self.update( )
 
+    def paintEvent( self, evt ):
+        self.cwmb.expandedColorSwatch.update( )
+
 if __name__=='__main__':
     parser = OptionParser( )
     parser.add_option('--debug', dest='do_debug', action='store_true', default = False,
