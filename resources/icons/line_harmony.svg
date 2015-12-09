@@ -11,27 +11,14 @@
  <g id="figure_1">
   <g id="patch_1">
    <path d="
-M0 381.421
+M5.32907e-15 381.421
 L399.556 381.421
 L399.556 0
-L0 0
-z
-" style="fill:#ffffff;"/>
+L5.32907e-15 0
+L5.32907e-15 381.421" style="fill:none;"/>
   </g>
   <g id="axes_1">
    <g id="patch_2">
-    <path clip-path="url(#pe5acf616c5)" d="
-M91.3519 254.927
-L91.3519 254.927
-L282.903 144.335
-L282.903 144.335
-L330.791 116.687
-L282.903 144.335
-L282.903 144.335
-z
-" style="fill:#808080;stroke:#808080;stroke-dasharray:6.000000,6.000000;stroke-dashoffset:0.0;stroke-width:6;"/>
-   </g>
-   <g id="patch_3">
     <path clip-path="url(#pe5acf616c5)" d="
 M91.3519 280.847
 C98.226 280.847 104.819 278.116 109.68 273.255
@@ -43,9 +30,9 @@ C68.163 241.459 65.4319 248.053 65.4319 254.927
 C65.4319 261.801 68.163 268.394 73.0237 273.255
 C77.8844 278.116 84.4778 280.847 91.3519 280.847
 z
-" style="fill:#ffffff;stroke:#000000;stroke-width:4;"/>
+" style="fill:none;stroke:#000000;stroke-linejoin:miter;stroke-width:4;"/>
    </g>
-   <g id="patch_4">
+   <g id="patch_3">
     <path clip-path="url(#pe5acf616c5)" d="
 M171.165 234.767
 C178.039 234.767 184.632 232.036 189.493 227.175
@@ -57,9 +44,9 @@ C147.976 195.379 145.245 201.973 145.245 208.847
 C145.245 215.721 147.976 222.314 152.837 227.175
 C157.697 232.036 164.291 234.767 171.165 234.767
 z
-" style="fill:#ffffff;stroke:#000000;stroke-width:4;"/>
+" style="fill:none;stroke:#000000;stroke-linejoin:miter;stroke-width:4;"/>
    </g>
-   <g id="patch_5">
+   <g id="patch_4">
     <path clip-path="url(#pe5acf616c5)" d="
 M250.978 188.687
 C257.852 188.687 264.445 185.956 269.306 181.095
@@ -71,9 +58,9 @@ C227.789 149.299 225.058 155.893 225.058 162.767
 C225.058 169.641 227.789 176.234 232.649 181.095
 C237.51 185.956 244.104 188.687 250.978 188.687
 z
-" style="fill:#ffffff;stroke:#000000;stroke-width:4;"/>
+" style="fill:none;stroke:#000000;stroke-linejoin:miter;stroke-width:4;"/>
    </g>
-   <g id="patch_6">
+   <g id="patch_5">
     <path clip-path="url(#pe5acf616c5)" d="
 M330.791 142.607
 C337.665 142.607 344.258 139.876 349.119 135.015
@@ -85,7 +72,22 @@ C307.602 103.219 304.871 109.813 304.871 116.687
 C304.871 123.561 307.602 130.154 312.462 135.015
 C317.323 139.876 323.917 142.607 330.791 142.607
 z
-" style="fill:#ffffff;stroke:#000000;stroke-width:4;"/>
+" style="fill:none;stroke:#000000;stroke-linejoin:miter;stroke-width:4;"/>
+   </g>
+   <g id="line2d_1">
+    <path clip-path="url(#pe5acf616c5)" d="
+M113.799 241.967
+L148.717 221.807" style="fill:none;stroke:#000000;stroke-dasharray:6.000000,6.000000;stroke-dashoffset:0.0;stroke-width:6;"/>
+   </g>
+   <g id="line2d_2">
+    <path clip-path="url(#pe5acf616c5)" d="
+M193.612 195.887
+L228.53 175.727" style="fill:none;stroke:#000000;stroke-dasharray:6.000000,6.000000;stroke-dashoffset:0.0;stroke-width:6;"/>
+   </g>
+   <g id="line2d_3">
+    <path clip-path="url(#pe5acf616c5)" d="
+M273.425 149.807
+L308.343 129.647" style="fill:none;stroke:#000000;stroke-dasharray:6.000000,6.000000;stroke-dashoffset:0.0;stroke-width:6;"/>
    </g>
   </g>
  </g>
