@@ -3,11 +3,113 @@ from PyQt4.QtCore import *
 import cssutils, os, subprocess, cwResources
 import math, numpy, logging
 
+class CircleHarmonyWidget( QWidget ):
+    def __init__( self, parent ):
+        super(CircleHarmonyWidget, self).__init__( parent )
+        self.parent = parent
+        self.hide( )
+        self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint | Qt.Window )
+        self.setSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed )
+        self.setWindowTitle('CIRCLE HARMONY')        
+        #
+        ##
+        # cwr = cwResources.ColorWheelResource( )
+        # self.setPixmap( QPixmap( cwr.getIcon( 'circle_harmony' ) ) )
+        layout = QVBoxLayout( )
+        self.setLayout( layout )
+        #
+        self.numPointSlider = QSlider( Qt.Horizontal )
+        self.numPointSlider.setMinimum(2)
+        self.numPointSlider.setMaximum(15)
+        self.numPointSlider.setValue( 3 )
+        self.numPointLabel = QLabel( '%02d' % self.numPointSlider.value( ) )
+        numPointWidget = QWidget( )
+        npwLayout = QGridLayout( )
+        numPointWidget.setLayout( npwLayout )
+        npwLayout.addWidget( self.numPointSlider, 0, 0, 3, 1 )
+        npwLayout.addWidget( self.numPointLabel, 0, 3, 1, 1 )
+        layout.addWidget( numPointWidget )
+        self.numPointSlider.valueChanged.connect( self.numPoints )
+        #
+        self.saturationSlider = QSlider( Qt.Horizontal )
+        self.saturationSlider.setMinimum(0 )
+        self.saturationSlider.setMaximum( 100 )
+        self.saturationSlider.setValue( 100 )
+        self.saturationLabel = QLabel( '%0.2f' % ( 0.01 *  self.saturationSlider.value( ) ) )
+        saturationWidget = QWidget( )
+        swLayout = QGridLayout( )
+        saturationWidget.setLayout( swLayout )
+        swLayout.addWidget( self.saturationSlider, 0, 0, 3, 1 )
+        swLayout.addWidget( self.saturationLabel, 0, 3, 1, 1 )
+        layout.addWidget( saturationWidget )
+        self.saturationSlider.valueChanged.connect( self.saturation )
+        #
+        self.valueSlider = QSlider( Qt.Horizontal )
+        self.valueSlider.setMinimum( 0 )
+        self.valueSlider.setMaximum( 100 )
+        self.valueSlider.setValue( 100 )
+        self.valueLabel = QLabel( '%0.2f' % ( 0.01 * self.valueSlider.value( ) ) )
+        valueWidget = QWidget( )
+        vwLayout = QGridLayout( )
+        valueWidget.setLayout( vwLayout )
+        vwLayout.addWidget( self.valueSlider, 0, 0, 3, 1 )
+        vwLayout.addWidget( self.valueLabel, 0, 3, 1, 1 )
+        layout.addWidget( valueWidget )
+        self.valueSlider.valueChanged.connect( self.value )
+        #
+        acceptButton = QPushButton("ACCEPT")
+        layout.addWidget( acceptButton )
+        acceptButton.clicked.connect( self.accept )
+        #
+        ## hide window action
+        hideAction = QAction( self )
+        hideAction.setShortcut( 'Esc' )
+        hideAction.triggered.connect( self.hideMe )
+        self.addAction( hideAction )
+
+    def hideMe( self ):
+        self.hide( )
+        self.numPointSlider.setValue( 2 )
+        self.saturationSlider.setValue( 100 )
+        self.valueSlider.setValue( 100 )
+        self.numPoints( )
+        self.saturation( )
+        self.value( )
+        self.parent.setEnabled( True )
+
+    def numPoints( self ):
+        self.numPointLabel = QLabel( '%02d' % self.numPointSlider.value( ) )
+
+    def saturation( self ):
+        self.saturationLabel = QLabel( '%0.2f' % ( 0.01 * self.saturationSlider.value( ) ) )
+        
+    def value( self ):
+        self.valueLabel = QLabel( '%0.2f' % ( 0.01 * self.valueSlider.value( ) ) )
+        
+    def accept( self ):
+        self.hideMe( )
+        logging.debug('ACCEPTED CIRCLEHARMONYWIDGET')
+        names = [ 'color_%02d' % ( idx + 1 ) for idx in xrange(len( self.numPointSlider.value( ) ) ) ]
+        s = 0.01 * self.saturationSlider.value( )
+        v = 0.01 * self.valueSlider.value( )
+        colors = [ ( idx * 1.0 / ( self.numPointSlider.value( ) + 1 ), s, v ) for
+                   idx in xrange(1, self.numPointSlider.value() + 1 )  ]
+        self.parent.pushNewColorsWithNames( colors, names )
+
+    def closeEvent( self, evt ):
+        logging.debug('ACCEPTED CIRCLEHARMONYWIDGET HIDING')
+        self.hideMe( )
+
+    def circleHarmony( self ):
+        self.show( )
+        self.parent.setEnabled( False )
+        self.setEnabled( True )
+        
+
 class ColorWheelExpandedColorSwatch( QWidget ):
     def __init__( self, parent ):
         super(ColorWheelExpandedColorSwatch, self).__init__( parent )
         self.parent = parent
-        self.setVisible( False )
         self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint | Qt.Window )
         self.setSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed )
         self.setWindowTitle( 'EXPANDED COLOR SWATCH' )
@@ -19,7 +121,7 @@ class ColorWheelExpandedColorSwatch( QWidget ):
         self.addAction( hideAction )
 
     def hideMe( self ):
-        self.setVisible( False )
+        self.hide( )
 
     def paintEvent( self, evt ):
         logging.debug("PAINTED IN ColorWheelExpandedColorSwatch")
@@ -148,6 +250,7 @@ class AboutmeWidget( QWidget ):
 class ColorWheelMenuBar( object ):
     def __init__(self, parent ):
         self.parent = parent
+        cwr = cwResources.ColorWheelResource( )
         #
         self.readmeWindow = ReadmeWidget( parent )
         self.aboutmeWindow = AboutmeWidget( parent )
@@ -165,6 +268,9 @@ class ColorWheelMenuBar( object ):
         transformAction = opsMenu.addAction('&Set Transform')
         snapBackAction = opsMenu.addAction('&Snap Back')
         removeColorAction = opsMenu.addAction( '&Remove Color' )
+        circleHarmonyAction = opsMenu.addAction( cwr.getIcon( 'circle_harmony' ), '&Circle Harmony' )
+        lineHarmonyAction = opsMenu.addAction( cwr.getIcon( 'line_harmony' ), '&Line Harmony' )
+        self.circleHarmonyWidget = CircleHarmonyWidget( parent )
         #
         helpMenu = self.parent.menuBar().addMenu( '&Help' )
         readmeAction = helpMenu.addAction( '&Readme' )
@@ -192,6 +298,10 @@ class ColorWheelMenuBar( object ):
         transformAction.triggered.connect( self.parent.cws.setTransform )
         removeColorAction.setShortcut( 'Ctrl+Z' )
         removeColorAction.triggered.connect( self.parent.removeColor )
+        circleHarmonyAction.setShortcut( 'Shift+Ctrl+C' )
+        circleHarmonyAction.triggered.connect( self.circleHarmonyWidget.circleHarmony )
+        lineHarmonyAction.setShortcut( 'Shift+Ctrl+L' )
+        #lineHarmonyAction.triggered.connect( self.lineHarmony )
         
     def enableSaveAction( self ):
         self.saveAction.setEnabled( True )
@@ -205,7 +315,7 @@ class ColorWheelMenuBar( object ):
             return
         if not self.expandedColorSwatch.isVisible( ):
             self.expandedColorSwatch.show( )
-            
+
     def openCSSURLFile( self ):
         while(True):
             myURL, ok = QInputDialog.getText( self, 'Open CSS URL. Can end by pressing cancel or by putting in blank.',
