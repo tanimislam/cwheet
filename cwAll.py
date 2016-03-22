@@ -148,11 +148,8 @@ class ColorWheelAll( QMainWindow ):
             color = QColor( colorName )
             h, s, v, a = color.getHsvF( )
             colors.append([ h, s, v ])
-        self.pushNewColorsWithNames( colors, colorLabels )
-
-    def pushNewColorsWithNames( self, colors, names ):
         self.pushNewColors( colors )
-        self.cwt.pushData( names )
+        self.cwt.pushData( colorLabels )
         self.update( )
 
     def paintEvent( self, evt ):
