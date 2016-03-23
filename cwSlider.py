@@ -20,10 +20,11 @@ class ColorWheelSlider( QWidget ):
         slidersLayout.addWidget( self.settingButton, 3, 3, 1, 2)        
     
     def __init__(self, parent):
+        cwr = ColorWheelResource( )
         super(QWidget, self).__init__( parent )
         self.parent = parent
-        self.setStyleSheet( 'font-family: Alef;')
-        # self.setStyleSheet('background-color: white;')
+        self.setObjectName( 'color0Widget' )
+        self.setStyleSheet( cwr.getStyleSheet( 'qwidget' ) )
         #
         self.rotationSlider = QSlider(Qt.Horizontal)
         self.rotationSlider.setTickInterval( 30 )

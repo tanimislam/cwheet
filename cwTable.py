@@ -92,7 +92,6 @@ class ColorWheelTableModel( QAbstractTableModel ):
                               len( self.parent.hsvs ) )
         self.colorNames.append( newColorName )
         self.endInsertRows( )
-        
 
     def subtractRow( self ):
         currIdx = self.parent.currentIndex

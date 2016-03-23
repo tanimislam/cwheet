@@ -1,6 +1,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import sys, math
+from cwResources import ColorWheelResource
 
 class ColorWheelValues( QWidget ):
     def __init__(self, parent ):
@@ -78,7 +79,8 @@ class ColorWheelBar( QWidget ):
         QWidget.__init__(self, parent)
         
         self.parent = parent
-        self.setStyleSheet( 'QWidget { background-color: white;}' )
+        #self.setObjectName( 'color0Widget' )
+        #self.setStyleSheet( _cwr.getStyleSheet( 'qwidget' ) )
 
         # this is the size of the pixel wheel
         self.height = int( 1.1 * mainDiameter )
@@ -157,7 +159,8 @@ class ColorWheelWidget( QWidget ):
     def __init__(self, parent, mainDiameter = 256 ):
         super(QWidget, self).__init__( parent )
         self.parent = parent
-        self.setStyleSheet( 'background-color: white;' )
+        #self.setObjectName( 'color0Widget' )
+        #self.setStyleSheet( _cwr.getStyleSheet( 'qwidget' ) )
         self.setMouseTracking( True )
 
         # this is the pixel diameter of the actual color wheel

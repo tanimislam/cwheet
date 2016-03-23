@@ -14,7 +14,6 @@ class ColorWheelAll( QMainWindow ):
         leftWidget = QWidget( )
         leftLayout = QVBoxLayout( )
         leftWidget.setLayout( leftLayout )
-        # leftWidget.setStyleSheet("background-color: #E6E6E6;")
         #
         ## color widget layout
         leftLayout.addWidget( self._layoutColorWidget( ) )
@@ -28,19 +27,23 @@ class ColorWheelAll( QMainWindow ):
         return leftWidget
 
     def _layoutRightWidget( self ):
+        cwr = ColorWheelResource( )
         rightWidget = QWidget( )
+        rightWidget.setObjectName( 'color1Widget' )
+        rightWidget.setStyleSheet( cwr.getStyleSheet( 'qwidget' ) )
         rightLayout = QVBoxLayout( )
         rightWidget.setLayout( rightLayout )
-        rightWidget.setStyleSheet("background-color: #E6E6E6;")
         rightLayout.addWidget( self.cwt )
         rightLayout.addWidget( QWidget( ) )
         rightLayout.addWidget( self._layoutColorWheelValuesScrollArea( ) )
         return rightWidget
 
     def _layoutColorWidget( self ):
+        cwr = ColorWheelResource( )
         colorWidget = QWidget( )
+        colorWidget.setObjectName( 'color0Widget' )
+        colorWidget.setStyleSheet( cwr.getStyleSheet( 'qwidget' ) )
         colorLayout = QGridLayout( )
-        colorWidget.setStyleSheet( "background-color: white;" )
         colorWidget.setLayout( colorLayout )
         width = 1.6 * self.mainWidth + 1.2 * self.mainDiameter
         height = 1.2 * self.mainDiameter
@@ -55,7 +58,6 @@ class ColorWheelAll( QMainWindow ):
         scrollArea.setFixedSize( 300, 250 )
         scrollArea.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
         return scrollArea
-        
         
     def __init__(self, mainWidth = 30, mainDiameter = 325 ):
         super(ColorWheelAll, self).__init__()
@@ -84,10 +86,15 @@ class ColorWheelAll( QMainWindow ):
         self.setWindowFlags( Qt.CustomizeWindowHint | Qt.WindowCloseButtonHint )
         self.layout().setSizeConstraint( QLayout.SetFixedSize )
         # self.setSizePolicy( QSizePolicy.Fixed, QSizePolicy.Fixed )
+        #
         screenshotAction = QAction( self )
         screenshotAction.setShortcut( 'Shift+Ctrl+P' )
         screenshotAction.triggered.connect( self.takeScreenshot )
         self.addAction( screenshotAction )
+        quitAction = QAction( self )
+        quitAction.setShortcuts( ['Ctrl+Q', 'Esc'] )
+        quitAction.triggered.connect( sys.exit )
+        self.addAction( quitAction )
 
     def takeScreenshot( self ):
         while( True ):

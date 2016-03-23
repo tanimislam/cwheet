@@ -1,7 +1,8 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-import cssutils, os, subprocess, cwResources
+import cssutils, os, subprocess
 import math, numpy, logging
+from cwResources import ColorWheelResource
 
 class ColorWheelExpandedColorSwatch( QWidget ):
     def __init__( self, parent ):
@@ -64,9 +65,11 @@ class ColorWheelExpandedColorSwatch( QWidget ):
 
 class ReadmeWidget( QWidget ):
     def __init__( self, parent ):
+        cwr = ColorWheelResource( )
         super( ReadmeWidget, self ).__init__( parent )
         self.parent = parent
-        self.setStyleSheet('font-family: Alef;')
+        self.setObjectName( 'color0Widget' )
+        self.setStyleSheet( cwr.getStyleSheet( 'qwidget' ) )
         layout = QVBoxLayout( )
         self.setLayout( layout )
         qf = QFont( )
@@ -103,12 +106,13 @@ class ReadmeWidget( QWidget ):
     def closeEvent( self, evt ):
         self.hideMe( )
 
-
 class AboutmeWidget( QWidget ):
     def __init__( self, parent ):
+        cwr = ColorWheelResource( )
         super( AboutmeWidget, self ).__init__( parent )
         self.parent = parent
-        self.setStyleSheet('font-family: Alef;')
+        self.setObjectName( 'color0Widget' )
+        self.setStyleSheet( cwr.getStyleSheet( 'qwidget' ) )
         layout = QVBoxLayout( )
         self.setLayout( layout )
         qf = QFont( )
