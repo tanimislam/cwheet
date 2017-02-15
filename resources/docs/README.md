@@ -1,8 +1,3 @@
----
-author:
-- Tanim Islam
-...
-
 INTRODUCTION
 ============
 
