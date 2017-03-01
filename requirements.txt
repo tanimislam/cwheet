@@ -1,2 +1,2 @@
 cssutils
-PyQt4
+progressbar

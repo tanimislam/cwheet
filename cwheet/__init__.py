@@ -1,6 +1,7 @@
 import os
 from matplotlib import rcParams
 from PyQt4.QtGui import QColor
+from functools import reduce
 
 rcParams['backend.qt4'] = 'PyQt4'
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from cwAll import ColorWheelAll
@@ -5,7 +7,6 @@ from cwResources import ColorWheelResource, find_avconv_handbrake
 import math, numpy, shutil, sys, os, cssutils, subprocess, logging
 from progressbar import Percentage, Bar, RotatingMarker, ProgressBar, ETA
 from enum import Enum
-from optparse import OptionParser
 
 class OperationAnimation(Enum):
     HUETRANSFORM = 1
