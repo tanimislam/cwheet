@@ -3,6 +3,7 @@ from PyQt4.QtCore import *
 import os, sys, glob, cssutils
 from functools import reduce
 from distutils.spawn import find_executable
+from . import resourcePath
 
 def find_avconv_handbrake( ):
     avconv_exec = None
@@ -74,7 +75,6 @@ def canSaveColorDict( colorTupleList ):
 class ColorWheelResource( object ):
     class __ColorWheelResource(object):
         def __init__(self):
-            mainPath = os.path.join( os.path.dirname( os.path.abspath(__file__) ), 'resources' )
             self._styleSheets = {}
             self._fontNames = set([])
             #self._colorwheel = [  QColor(name) for name in ( '#E5EDE9', '#EDE6CE', '#EDDFEB',
@@ -82,19 +82,19 @@ class ColorWheelResource( object ):
             self._colorwheel = [ QColor(num, num, num) for num in range(240, 210, -5) ]
             self._icons = {}
             fontNames = []
-            for cssFile in glob.glob( os.path.join( mainPath, 'css', '*.css' ) ):
+            for cssFile in glob.glob( os.path.join( resourcePath, 'css', '*.css' ) ):
                 keyName = os.path.basename( cssFile ).replace('.css', '').strip()
                 qFile = QFile( cssFile )
                 qFile.open( QIODevice.ReadOnly )                
                 self._styleSheets[ keyName ] = str( qFile.readAll( ) )
                 qFile.close()
             #
-            for fontFile in glob.glob( os.path.join( mainPath, 'fonts', '*.ttf' ) ):
+            for fontFile in glob.glob( os.path.join( resourcePath, 'fonts', '*.ttf' ) ):
                 fontName = os.path.basename( fontFile ).replace('.ttf', '').strip()
                 QFontDatabase.addApplicationFont( fontFile )
-            numFonts = len( glob.glob( os.path.join( mainPath, 'fonts', '*.ttf' ) ) )
+            numFonts = len( glob.glob( os.path.join( resourcePath, 'fonts', '*.ttf' ) ) )
             #
-            for iconFile in glob.glob( os.path.join( mainPath, 'icons', '*.png' ) ):
+            for iconFile in glob.glob( os.path.join( resourcePath, 'icons', '*.png' ) ):
                 iconName = os.path.basename( iconFile ).replace( '.png', '').strip( )
                 self._icons[ iconName ] = QIcon( iconFile )
             ffams = set(reduce(lambda x, y: x + y, [ list( QFontDatabase.applicationFontFamilies(idx) ) for

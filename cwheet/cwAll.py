@@ -6,7 +6,6 @@ from cwSlider import ColorWheelSlider
 from cwButtons import ColorWheelButtons
 from cwMenubar import ColorWheelMenuBar
 from cwResources import ColorWheelResource, getBackgroundColorDict
-from optparse import OptionParser
 import sys, math, os, logging
 
 class ColorWheelAll( QMainWindow ):
@@ -162,14 +161,3 @@ class ColorWheelAll( QMainWindow ):
     def paintEvent( self, evt ):
         self.cwmb.expandedColorSwatch.update( )
 
-if __name__=='__main__':
-    parser = OptionParser( )
-    parser.add_option('--debug', dest='do_debug', action='store_true', default = False,
-                      help = 'If chosen, print out debug messages to stdout.')
-    opts, args = parser.parse_args( )
-    if opts.do_debug:
-        logging.getLogger().setLevel( logging.DEBUG )
-    app = QApplication([])
-    cwa = ColorWheelAll(mainDiameter = 325 )
-    cwa.show()
-    sys.exit( app.exec_())
